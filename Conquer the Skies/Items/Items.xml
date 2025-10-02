@@ -29,7 +29,7 @@
     <Holdable slots="RightHand+LeftHand" aimpos="90,0" handle1="-35,32" handle2="-27,34" msg="ItemMsgPickUpSelect" holdangle="-10">
       <LightComponent LightColor="220,255,150,200" range="500" powerconsumption="10" IsOn="true">
         <Upgrade gameversion="1.1.2.0" powerconsumption="10" />
-        <LightTexture texture="Content/Lights/lightcone.png" origin="-0.01, 0.5" size="1.0,1.0" />
+        <!--<LightTexture texture="Content/Lights/lightcone.png" origin="-0.01, 0.5" size="1.0,1.0" />-->
       </LightComponent>
       <!-- activates the light when holding aim -->
       <StatusEffect type="OnSecondaryUse" target="This" voltage="1.0" setvalue="true">
@@ -110,7 +110,10 @@
     <InventoryIcon texture="Content/Items/InventoryIconAtlas.png" sourcerect="256,128,67,62" origin="0.5,0.5" />
     <Sprite texture="Content/Items/Diving/Scooter.png" depth="0.55" sourcerect="0,0,140,102" />
     <Body width="120" height="60" density="10" />
-    <Holdable slots="Any,RightHand+LeftHand" aimpos="90,0" handle1="-35,32" handle2="-27,34" msg="ItemMsgPickUpSelect" holdangle="-10">
+    <Wearable slots="Bag" msg="ItemMsgEquipSelect" canbeselected="false" canbepicked="true" pickkey="Select">
+      <sprite texture="Content/Items/Diving/Scooter.png" canbehiddenbyotherwearables="false" rotation="85" depth="0.6" sourcerect="0,0,140,102" limb="Torso" depthlimb="LeftArm" scale="0.5" origin="0.5,0.95" />
+    </Wearable>
+    <Holdable slots="RightHand+LeftHand" aimpos="90,0" handle1="-35,32" handle2="-27,34" msg="ItemMsgPickUpSelect" holdangle="-10">
       <LightComponent LightColor="220,255,150,200" range="300" powerconsumption="10" IsOn="true">
         <!--<LightTexture texture="Content/Lights/lightcone.png" origin="-0.01, 0.5" size="1.0,1.0" />-->
         <Upgrade gameversion="1.1.2.0" powerconsumption="10" />
@@ -159,7 +162,7 @@
       <icon identifier="mineral" texture="Content/UI/MainIconsAtlas.png" sourcerect="336,434,7,12" origin="0.5,0.5"/>
       <icon identifier="" texture="Content/UI/MainIconsAtlas.png" sourcerect="346,416,4,4" origin="0.5,0.5"/>
       <LightComponent LightColor="120,255,120,255" range="25" powerconsumption="10" pulsefrequency="0.5" pulseamount="0.8" castshadows="false" IsOn="false" canbeselected="false">
-        <IsActive TargetItemComponent="Sonar" CurrentMode="Active"/>        
+        <IsActive TargetItemComponent="Sonar" CurrentMode="Active"/>
       </LightComponent>
     </Sonar>
   </Item>
