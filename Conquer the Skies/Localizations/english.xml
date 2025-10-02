@@ -15,4 +15,5 @@
   <entitydescription.alienspear>A harpoon for the harpoon gun, made of alien material. Can be used as a grappling hook.</entitydescription.alienspear>
   <entitydescription.spearunique>An antique spear named after a legendary captain. Can be used as a grappling hook.</entitydescription.spearunique>
   <!--<entitydescription.replaceme></entitydescription.replaceme>-->
+  </Override>
 </infotexts>
