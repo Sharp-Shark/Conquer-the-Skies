@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<infotexts language="English" nowhitespace="false" translatedname="English">
+  <!-- Room Names -->
+  <roomname.deck>Deck</roomname.deck>
+  
+  <Override>
+  <entityname.underwaterscooter>Air Scooter</entityname.underwaterscooter>
+  <entitydescription.underwaterscooter>A battery-powered aerial propulsion device.</entitydescription.underwaterscooter>
+  <entityname.cargoscooter>Cargo Scooter</entityname.cargoscooter>
+  <entitydescription.cargoscooter>An aerial scooter special-made to transport material in the air. While the scooter is too large to be stored in one's inventory, its heft is justified by its powerful propeller.</entitydescription.cargoscooter>
+  <entitydescription.extinguisher>A handheld carbon dioxide extinguisher. Crouch whilst using this or you'll fly away!</entitydescription.extinguisher>
+  <entitydescription.harpoongun>Launches harpoons, explosive harpoons, and alien harpoons. Can be used as a grappling hook gun.</entitydescription.harpoongun>
+  <entitydescription.harpooncoilrifle>An advanced harpoon gun, powered by an energy source to launch harpoons at high velocities. Can be used as a grappling hook gun.</entitydescription.harpooncoilrifle>
+  <entitydescription.spear>A harpoon for the harpoon gun. Can be used as a grappling hook.</entitydescription.spear>
+  <entitydescription.alienspear>A harpoon for the harpoon gun, made of alien material. Can be used as a grappling hook.</entitydescription.alienspear>
+  <entitydescription.spearunique>An antique spear named after a legendary captain. Can be used as a grappling hook.</entitydescription.spearunique>
+  <!--<entitydescription.replaceme></entitydescription.replaceme>-->
+</infotexts>
