@@ -1,6 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Items>
 <Override>
+  <!-- slipsuit is a jetsuit -->
+  <Item name="" identifier="slipsuit" variantof="combatdivingsuit" allowasextracargo="true" botpriority="1.5">
+    <Price baseprice="630" sold="false" />
+    <PreferredContainer primary="divingsuitcontainer" spawnprobability="0.0"/>
+    <PreferredContainer primary="wreckdivingsuitcontainer"  spawnprobability="0.0"/>
+    <Deconstruct time="30">
+      <Item identifier="ballisticfiber" />
+      <Item identifier="titaniumaluminiumalloy" />
+      <Item identifier="titaniumaluminiumalloy" />
+      <Item identifier="rubber" />
+      <Item identifier="rubber" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="45" requiresrecipe="true">
+      <RequiredSkill identifier="mechanical" level="20" />
+      <RequiredItem identifier="combatdivingsuit" />
+      <RequiredItem identifier="rubber" />
+      <!-- clear the rest of the requirements -->
+      <RequiredItem />
+      <RequiredItem />
+    </Fabricate>
+    <InventoryIcon texture="Content/Items/InventoryIconAtlas2.png" sourcerect="256,704,128,128" origin="0.5,0.5" />
+    <Sprite name="Slipsuit Item" texture="Content/Items/Jobgear/Security/Slipsuit_Items.png" sourcerect="7,8,157,121" depth="0.55" origin="0.5,0.5" />
+    <ContainedSprite name="Slipsuit In Vertical Locker" allowedcontainertags="divingsuitcontainervertical" texture="Content/Items/Jobgear/Security/Slipsuit_Items.png" sourcerect="171,0,77,192" depth="0.55" origin="0.5,0.5" />
+    <ContainedSprite name="Slipsuit Behind Window" allowedcontainertags="divingsuitcontainerwindow" texture="%ModDir%/Items/slipsuit.png" sourcerect="430,0,80,207" depth="0.55" origin="-0.12,-0.13" />
+    <ContainedSprite name="Slipsuit In Horizontal Locker" allowedcontainertags="divingsuitcontainerhorizontal" texture="Content/Items/Jobgear/Security/Slipsuit_Items.png" sourcerect="0,193,230,63" depth="0.55" origin="0.6,0.5" />
+    <Body radius="45" width="34" density="20" />
+    <Wearable slots="OuterClothes+Bag">
+      <sprite name="Slipsuit Helmet Wearable" texture="Content/Items/Jobgear/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.65" hidelimb="false" alphaclipotherwearables="true" sourcerect="0,520,105,124" origin="0.5,0.4">
+        <LightComponent range="200.0" lightcolor="250,224,165,255" powerconsumption="10" IsOn="true" allowingameediting="false">
+          <StatusEffect type="OnWearing" target="This,Character" Voltage="1.0" setvalue="true">
+            <Conditional IsDead="false" />
+          </StatusEffect>
+          <LightTexture texture="Content/Lights/divinghelmetlight.png" origin="0.05, 0.5" size="1.0,1.0" />
+        </LightComponent>
+      </sprite>
+      <sprite name="SlipSuit Torso" texture="%ModDir%/Items/slipsuit.png" limb="Torso" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
+      <sprite name="SlipSuit Right Hand" texture="%ModDir%/Items/slipsuit.png" limb="RightHand" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
+      <sprite name="SlipSuit Left Hand" texture="%ModDir%/Items/slipsuit.png" limb="LeftHand" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
+      <sprite name="SlipSuit Right Upper Arm" texture="%ModDir%/Items/slipsuit.png" limb="RightArm" depthlimb="RightForearm" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
+      <sprite name="SlipSuit Left Upper Arm" texture="%ModDir%/Items/slipsuit.png" limb="LeftArm" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
+      <sprite name="SlipSuit Right Lower Arm" texture="%ModDir%/Items/slipsuit.png" limb="RightForearm" depthlimb="RightArm" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
+      <sprite name="SlipSuit Left Lower Arm" texture="%ModDir%/Items/slipsuit.png" limb="LeftForearm" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
+      <sprite name="SlipSuit Waist" texture="%ModDir%/Items/slipsuit.png" limb="Waist" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
+      <sprite name="SlipSuit Right Thigh" texture="%ModDir%/Items/slipsuit.png" limb="RightThigh" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
+      <sprite name="SlipSuit Left Thigh" texture="%ModDir%/Items/slipsuit.png" limb="LeftThigh" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
+      <sprite name="SlipSuit Right Leg" texture="%ModDir%/Items/slipsuit.png" limb="RightLeg" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
+      <sprite name="SlipSuit Left Leg" texture="%ModDir%/Items/slipsuit.png" limb="LeftLeg" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
+      <sprite name="SlipSuit Left Shoe" texture="%ModDir%/Items/slipsuit.png" limb="LeftFoot" sound="footstep_armor_heavy" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
+      <sprite name="SlipSuit Right Shoe" texture="%ModDir%/Items/slipsuit.png" limb="RightFoot" sound="footstep_armor_heavy" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
+      <sprite texture="%ModDir%/Items/slipsuit.png" canbehiddenbyotherwearables="false" rotation="85" depth="0.6" sourcerect="0,256,140,102" limb="Torso" depthlimb="Torso" scale="0.5" origin="0.5,0.95" />
+      <!--<StatValue stattype="SwimmingSpeed" value="0.45" />
+      <StatValue stattype="PropulsionSpeed" value="0.4" />
+      <StatValue stattype="WalkingSpeed" value="-0.2" />-->
+    </Wearable>
+    <Propulsion force="50" usablein="both" particles="steam">
+      <RequiredItems items="oxygentank" targetslot="0" type="Contained" msg="itemmsgoxygentankrequired" />
+      <StatusEffect type="OnUse" target="Contained" targetslot="0" Condition="-1">
+        <RequiredItem items="oxygentank" type="Contained" />
+      </StatusEffect>
+      <sound file="Content/Items/Diving/ScooterLoop.ogg" type="OnUse" range="500.0" loop="true" />
+    </Propulsion>
+  </Item>
   <!-- cargo scooter works in air and has a sonar -->
   <Item name="" identifier="cargoscooter" category="Equipment,Diving" Tags="mediumitem,provocative,scooter,mobilecontainer" allowasextracargo="true" cargocontaineridentifier="metalcrate" description="" Scale="0.5" impactsoundtag="impact_metal_heavy" isshootable="true">
     <PreferredContainer primary="divingcab"/>    

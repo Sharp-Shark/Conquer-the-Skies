@@ -52,8 +52,16 @@ namespace NoWater
 			prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideRopeUpdate"))
 			);
 			harmony.Patch(
+			original: typeof(Barotrauma.Items.Components.Wearable).GetMethod("Update", AccessTools.all),
+			prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideWearableUpdateSlipsuit"))
+			);
+			harmony.Patch(
 			original: typeof(Barotrauma.Items.Components.Propulsion).GetMethod("Use", AccessTools.all),
-			postfix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverridePropulsionUse"))
+			prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverridePropulsionUseSlipsuit"))
+			);
+			harmony.Patch(
+			original: typeof(Barotrauma.Items.Components.Propulsion).GetMethod("Use", AccessTools.all),
+			prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverridePropulsionUse"))
 			);
 			harmony.Patch(
 			original: typeof(Ragdoll).GetMethod("GetImpactDamage", AccessTools.all),
@@ -692,11 +700,66 @@ namespace NoWater
             }
             return;
         }
+        public static void OverrideWearableUpdateSlipsuit(Barotrauma.Items.Components.Wearable __instance, float deltaTime, Camera cam)
+        {
+            if(__instance.item.Prefab.Identifier != "slipsuit".ToIdentifier()) { return; }
+            Character character = __instance.picker;
+            __instance.item.Use(deltaTime, character);
+        }
+        public static bool OverridePropulsionUseSlipsuit(Barotrauma.Items.Components.Propulsion __instance, float deltaTime, Character character, ref bool __result)
+        {
+            if(__instance.item.Prefab.Identifier != "slipsuit".ToIdentifier()) { return true; }
+            if (character == null || character.Removed) { return false; }
+            if (!character.IsKeyDown(InputType.Run) || character.Stun > 0.0f) { return false; }
+            if (__instance.UsableIn == Barotrauma.Items.Components.Propulsion.UseEnvironment.None) { return false; }
+
+            __instance.IsActive = true;
+            __instance.useState = 0.1f;
+
+            if (character.AnimController.InWater)
+            {
+                if (__instance.UsableIn == Barotrauma.Items.Components.Propulsion.UseEnvironment.Air) { return false; }
+            }
+            else
+            {
+                if (__instance.UsableIn == Barotrauma.Items.Components.Propulsion.UseEnvironment.Water) { return false; }
+            }
+            
+            Vector2 move = new Vector2((character.IsKeyDown(InputType.Right) ? 1.0f : 0.0f) - (character.IsKeyDown(InputType.Left) ? 1.0f : 0.0f),
+            (character.IsKeyDown(InputType.Up) ? 1.0f : 0.0f) - (character.IsKeyDown(InputType.Down) ? 1.0f : 0.0f));
+            if(move.LengthSquared() <= 0) { return false; }
+
+            Vector2 dir = Vector2.Normalize(move) * 100f;
+            if (!MathUtils.IsValid(dir)) { return false; }
+            float length = 200;
+            dir = dir.ClampLength(length) / length;
+            Vector2 propulsion = dir * __instance.Force * 2.0f * character.PropulsionSpeedMultiplier * (1.0f + character.GetStatValue(StatTypes.PropulsionSpeed));
+            character.AnimController.onGround = false;
+            
+            character.AnimController.Collider.ApplyForce(propulsion);
+
+#if CLIENT
+            if (!string.IsNullOrWhiteSpace(__instance.particles))
+            {
+                GameMain.ParticleManager.CreateParticle(__instance.particles, __instance.item.WorldPosition,
+                    __instance.item.body.Rotation + ((__instance.item.body.Dir > 0.0f) ? 0.0f : MathHelper.Pi), 0.0f, __instance.item.CurrentHull);
+            }
+#endif
+            __result = true;
+            return false;
+        }
         public static void OverridePropulsionUse(Barotrauma.Items.Components.Propulsion __instance, float deltaTime, Character character)
         {
             if(!__instance.IsActive) { return; }
 
+
             Vector2 dir = character.CursorPosition - character.Position;
+
+            if(__instance.item.Prefab.Identifier == "slipsuit".ToIdentifier())
+            {
+                return;
+            }
+
             if(dir.Y * __instance.Force <= 0 || character.IsKeyDown(InputType.Crouch)) { return; }
 
             character.AnimController.onGround = false;

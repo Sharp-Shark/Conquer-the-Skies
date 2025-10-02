@@ -4,6 +4,10 @@
   <roomname.deck>Deck</roomname.deck>
   
   <Override>
+  <entityname.combatdivingsuit>Combat Suit</entityname.combatdivingsuit>
+  <entitydescription.combatdivingsuit>An agile, lightweight suit designed for combat. Offers some protection against damage and withstands pressure up to a depth of 5,700 meters.</entitydescription.combatdivingsuit>
+  <entityname.slipsuit>Jetsuit</entityname.slipsuit>
+  <entitydescription.slipsuit>A modified Combat Suit fitted with an air scooter to allow for aerial movement. Sadly, the propulsion system also make it heavy and thus difficult to walk on solid ground. Withstands pressure up to a depth of 5,700 meters.</entitydescription.slipsuit>
   <entityname.underwaterscooter>Air Scooter</entityname.underwaterscooter>
   <entitydescription.underwaterscooter>A battery-powered aerial propulsion device.</entitydescription.underwaterscooter>
   <entityname.cargoscooter>Cargo Scooter</entityname.cargoscooter>
