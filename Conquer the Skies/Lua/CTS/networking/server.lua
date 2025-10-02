@@ -1,0 +1,59 @@
+if CLIENT then return end
+if (CTS.discordWebHook == nil) or (CTS.discordWebHook == '') then return end
+
+local function escapeQuotes (str)
+    return str:gsub("\"", "\\\"")
+end
+
+local function discordChatMessage (message, hook)
+	if CLIENT or (not Game.ServerSettings.IsPublic) then return end
+
+	local discordWebHook = CTS.discordWebHook
+	if hook ~= nil then
+		discordWebHook = hook
+	end
+    local escapedName = escapeQuotes(Game.ServerSettings.ServerName)
+    local escapedMessage = escapeQuotes(message)
+
+    Networking.RequestPostHTTP(discordWebHook, function(result) end, '{\"content\": \"'..escapedMessage..'\", \"username\": \"'..escapedName..'\"}')
+end
+
+Hook.Add("client.connected", "CTS.discordClientConnect", function (connectedClient)
+	if SERVER and Game.ServerSettings.IsPublic then
+		local name = connectedClient.Name
+		
+		if string.match(name, 'http://') or string.match(name, 'https://') then
+			name = '**[CENSORED]**'
+		end
+	
+		if #Client.ClientList > 1 then
+			discordChatMessage('01| ' .. name .. ' has joined! There are ' .. #Client.ClientList .. ' clients.')
+		elseif #Client.ClientList > 0 then
+			discordChatMessage('02| ' .. name .. ' has joined! There is ' .. #Client.ClientList .. ' client.')
+		else
+			discordChatMessage('03| ' .. name .. ' has joined! There are no clients.')
+		end
+	end
+end)
+
+Hook.Add("client.disconnected", "CTS.discordClientDisconnect", function (disconnectedClient)
+	if SERVER and Game.ServerSettings.IsPublic then
+		local name = disconnectedClient.Name
+		
+		if string.match(name, 'http://') or string.match(name, 'https://') then
+			name = '**[CENSORED]**'
+		end
+		
+		if (#Client.ClientList - 1) > 1 then
+			discordChatMessage('04| ' .. name .. ' has left. There are ' .. (#Client.ClientList - 1) .. ' clients.')
+		elseif (#Client.ClientList - 1) > 0 then
+			discordChatMessage('05| ' .. name .. ' has left. There is ' .. (#Client.ClientList - 1) .. ' client.')
+		else
+			discordChatMessage('06| ' .. name .. ' has left. There are no clients.')
+		end
+	end
+end)
+
+if SERVER and Game.ServerSettings.IsPublic then
+	discordChatMessage('00| Server is up and running!')
+end

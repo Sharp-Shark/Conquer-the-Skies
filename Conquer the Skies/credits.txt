@@ -1,0 +1,6 @@
+Ahead is a list of all the people whose work contributed to this mod.
+Base C# taken from No Water mod by DrBruhman.
+Submarines "HMS Riptide" and "HMS Brass Wasp" by Barry Ballast.
+Submarine "JFS Jrringafest" by Jerry Peterson (TribalKnight).
+Submarines "LA&G Kosmonaut", "LA&G Scatterboard", "Aerial Hussar" and "Fighter Plane" by Comrade Leanna.
+Everything else by Sharp-Shark.
