@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<contentpackage name="Conquer the Skies" modversion="1.0.20" corepackage="False" gameversion="1.10.6.0">
+<contentpackage name="Conquer the Skies" modversion="1.0.21" corepackage="False" gameversion="1.10.6.0">
   <Item file="%ModDir%/Items/Items.xml" />
   <Submarine file="%ModDir%/Submarines/Testbox.sub" />
-  <Submarine file="%ModDir%/Submarines/HMS Riptide.sub" />
-  <Submarine file="%ModDir%/Submarines/HMS Hidenburg.sub" />
-  <Submarine file="%ModDir%/Submarines/HMS Brick.sub" />
   <Submarine file="%ModDir%/Submarines/HMS Brass Wasp.sub" />
-  <Submarine file="%ModDir%/Submarines/HMS Bloatfish.sub" />
-  <Submarine file="%ModDir%/Submarines/JFS Jerringafest.sub" />
   <Submarine file="%ModDir%/Submarines/Aerial Hussar.sub" />
-  <Submarine file="%ModDir%/./Submarines/LA&amp;G Scatterboard.sub" />
+  <Submarine file="%ModDir%/Submarines/LA&amp;G Scatterboard.sub" />
   <Submarine file="%ModDir%/Submarines/Fighter Plane.sub" />
-  <Submarine file="%ModDir%/./Submarines/LA&amp;G Kosmonaut.sub" />
+  <Submarine file="%ModDir%/Submarines/LA&amp;G Kosmonaut.sub" />
+  <Submarine file="%ModDir%/Submarines/JFS Jerringafest.sub" />
+  <Submarine file="%ModDir%/Submarines/HMS Bloatfish.sub" />
+  <Submarine file="%ModDir%/Submarines/HMS Hidenburg.sub" />
+  <Submarine file="%ModDir%/Submarines/HMS Riptide.sub" />
+  <Submarine file="%ModDir%/Submarines/HMS Brick.sub" />
 </contentpackage>

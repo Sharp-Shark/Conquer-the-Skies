@@ -1,5 +1,7 @@
 Ahead is a list of all the people whose work contributed to this mod.
 Base C# taken from No Water mod by DrBruhman.
+Thanks to Evil Factory, Ydrec and the Luatrauma discord for helping me overcome a lot of the hurdles I came across.
+Logic for "fleet.lua" taken from TraitorMod by Evil Factory.
 Submarines "HMS Riptide" and "HMS Brass Wasp" by Barry Ballast.
 Submarine "JFS Jrringafest" by Jerry Peterson (TribalKnight).
 Submarines "LA&G Kosmonaut", "LA&G Scatterboard", "Aerial Hussar" and "Fighter Plane" by Comrade Leanna.

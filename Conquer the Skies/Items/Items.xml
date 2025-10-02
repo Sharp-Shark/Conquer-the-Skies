@@ -1,6 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Items>
 <Override>
+  <!-- cargo scooter works in air and has a sonar -->
+  <Item name="" identifier="cargoscooter" category="Equipment,Diving" Tags="mediumitem,provocative,scooter,mobilecontainer" allowasextracargo="true" cargocontaineridentifier="metalcrate" description="" Scale="0.5" impactsoundtag="impact_metal_heavy" isshootable="true">
+    <PreferredContainer primary="divingcab"/>    
+    <Price baseprice="400" sold="false">
+      <Price storeidentifier="merchantoutpost" multiplier="0.9" />
+      <Price storeidentifier="merchantcity" multiplier="0.85" />
+      <Price storeidentifier="merchantresearch" />
+      <Price storeidentifier="merchantmilitary" />
+      <Price storeidentifier="merchantmine" multiplier="1.25" />
+    </Price>
+    <Deconstruct time="20">
+      <Item identifier="aluminium" />
+      <Item identifier="copper" />
+      <Item identifier="tin" />
+      <Item identifier="plastic" />
+      <Item identifier="titaniumaluminiumalloy" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="30" requiresrecipe="true">
+      <RequiredSkill identifier="mechanical" level="30" />
+      <RequiredItem identifier="underwaterscooter" />
+      <RequiredItem identifier="titaniumaluminiumalloy" amount="2" />
+    </Fabricate>
+    <InventoryIcon texture="Content/Items/JobGear/TalentGear.png" sourcerect="131,123,53,58" origin="0.5,0.5" />
+    <Sprite texture="Content/Items/JobGear/TalentGear.png" depth="0.55" sourcerect="295,195,149,105" origin="0.5,0.5" />
+    <Body width="140" height="100" density="10" />
+    <Holdable slots="RightHand+LeftHand" aimpos="90,0" handle1="-35,32" handle2="-27,34" msg="ItemMsgPickUpSelect" holdangle="-10">
+      <LightComponent LightColor="220,255,150,200" range="500" powerconsumption="10" IsOn="true">
+        <Upgrade gameversion="1.1.2.0" powerconsumption="10" />
+        <LightTexture texture="Content/Lights/lightcone.png" origin="-0.01, 0.5" size="1.0,1.0" />
+      </LightComponent>
+      <!-- activates the light when holding aim -->
+      <StatusEffect type="OnSecondaryUse" target="This" voltage="1.0" setvalue="true">
+        <RequiredItem items="mobilebattery" type="Contained" />
+      </StatusEffect>
+      <!-- Battery drain when using the light, adds up with propulsion -->
+      <StatusEffect type="OnSecondaryUse" target="Contained" targetslot="0" Condition="-0.05" />
+    </Holdable>
+    <Propulsion force="50" usablein="both" particles="steam">
+      <RequiredItems items="mobilebattery" targetslot="0" type="Contained" msg="ItemMsgBatteryCellRequired" />
+      <StatusEffect type="OnUse" target="Contained" targetslot="0" Condition="-0.2">
+        <RequiredItem items="mobilebattery" type="Contained" />
+      </StatusEffect>
+      <sound file="Content/Items/Diving/ScooterLoop.ogg" type="OnUse" range="500.0" loop="true" />
+    </Propulsion>
+    <ItemContainer capacity="1" maxstacksize="1" slotsperrow="3" hideitems="true" containedstateindicatorslot="0" containedstateindicatorstyle="battery">
+      <Containable items="mobilebattery" />
+      <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+      <SubContainer capacity="11" maxstacksize="32">
+        <Containable items="smallitem,mediumitem" excludeditems="toolbelt,toolbox,bandolier,cargoscooter,largemobilecontainer" />
+      </SubContainer>
+    </ItemContainer>
+    <AiTarget soundrange="3000" maxsightrange="3000" />
+    <!-- built-in sonar -->
+    <Sonar range="6000.0" powerconsumption="10" drawhudwhenequipped="true" detectsubmarinewalls="true" displaybordersize="-0.1" characterusable="false" hasmineralscanner="true" allowuioverlap="true">
+      <StatusEffect type="OnUse" targettype="Contained" Condition="-1.0" disabledeltatime="true">
+        <RequiredItem items="mobilebattery" type="Contained" />
+      </StatusEffect>
+      <sound file="Content/Items/Command/SonarPing.ogg" type="OnUse" range="1000.0" frequencymultiplier="1.5" />
+      <GuiFrame relativesize="0.4,0.4" anchor="CenterLeft" relativeoffset="0.006,-0.01"/>
+      <PingCircle texture="Content/Items/Command/pingCircle.png" origin="0.5,0.5" />
+      <DirectionalPingCircle texture="Content/Items/Command/directionalPingCircle.png" origin="0.0,0.5" />
+      <ScreenOverlay texture="Content/Items/Command/sonarOverlay.png" origin="0.5,0.5" />
+      <ScreenBackground texture="Content/Items/Command/sonarBackground.png" origin="0.5,0.5" />
+      <DirectionalPingBackground texture="Content/Items/Command/directionalPingBackground.png" origin="0.5,0.5" />
+      <DirectionalPingButton index="0" texture="Content/Items/Command/directionalPingButton.png" sourcerect="0,0,91,266" origin="-4.5275,0.5" />
+      <DirectionalPingButton index="1" texture="Content/Items/Command/directionalPingButton.png" sourcerect="133,0,91,266" origin="-4.5275,0.5" />
+      <DirectionalPingButton index="2" texture="Content/Items/Command/directionalPingButton.png" sourcerect="266,0,91,266" origin="-4.5275,0.5" />
+      <Blip texture="Content/Items/Command/sonarBlip.png" origin="0.5,0.5" />
+      <LineSprite texture="Content/Items/Command/NavUI.png" sourcerect="181,141,109,4" origin="0,0.5"/>
+      <icon identifier="outpost" texture="Content/UI/MainIconsAtlas.png" sourcerect="352,398,16,8" origin="0.5,0.5"/>
+      <icon identifier="submarine" texture="Content/UI/MainIconsAtlas.png" sourcerect="353,407,14,6" origin="0.5,0.5"/>
+      <icon identifier="shuttle" texture="Content/UI/MainIconsAtlas.png" sourcerect="336,407,8,6" origin="0.5,0.5"/>
+      <icon identifier="artifact" texture="Content/UI/MainIconsAtlas.png" sourcerect="336,414,8,8" origin="0.5,0.5"/>
+      <icon identifier="location" texture="Content/UI/MainIconsAtlas.png" sourcerect="349,435,11,11" origin="0.5,0.5"/>
+      <icon identifier="mineral" texture="Content/UI/MainIconsAtlas.png" sourcerect="336,434,7,12" origin="0.5,0.5"/>
+      <icon identifier="" texture="Content/UI/MainIconsAtlas.png" sourcerect="346,416,4,4" origin="0.5,0.5"/>
+      <LightComponent LightColor="120,255,120,255" range="25" powerconsumption="10" pulsefrequency="0.5" pulseamount="0.8" castshadows="false" IsOn="false" canbeselected="false">
+        <IsActive TargetItemComponent="Sonar" CurrentMode="Active"/>        
+      </LightComponent>
+    </Sonar>
+  </Item>
   <!-- underwater scooter works in air and has a sonar -->
   <Item name="" identifier="underwaterscooter" category="Diving,Equipment" Tags="smallitem,provocative,scooter" cargocontaineridentifier="metalcrate" description="" Scale="0.5" impactsoundtag="impact_metal_light" isshootable="true" requireaimtouse="True">
     <Upgrade gameversion="0.10.0.0" scale="0.5" />
