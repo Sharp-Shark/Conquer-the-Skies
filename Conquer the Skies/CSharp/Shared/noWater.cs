@@ -727,12 +727,12 @@ namespace NoWater
             
             Vector2 move = new Vector2((character.IsKeyDown(InputType.Right) ? 1.0f : 0.0f) - (character.IsKeyDown(InputType.Left) ? 1.0f : 0.0f),
             (character.IsKeyDown(InputType.Up) ? 1.0f : 0.0f) - (character.IsKeyDown(InputType.Down) ? 1.0f : 0.0f));
+            move.Y = MathHelper.Max(0, move.Y); // when going down, just freefall instead
             if(move.LengthSquared() <= 0) { return false; }
 
-            Vector2 dir = Vector2.Normalize(move) * 100f;
+            Vector2 dir = Vector2.Normalize(move) * 0.6f;
+            if(dir.LengthSquared() <= 0) { return false; }
             if (!MathUtils.IsValid(dir)) { return false; }
-            float length = 200;
-            dir = dir.ClampLength(length) / length;
             Vector2 propulsion = dir * __instance.Force * 2.0f * character.PropulsionSpeedMultiplier * (1.0f + character.GetStatValue(StatTypes.PropulsionSpeed));
             character.AnimController.onGround = false;
             
@@ -751,14 +751,9 @@ namespace NoWater
         public static void OverridePropulsionUse(Barotrauma.Items.Components.Propulsion __instance, float deltaTime, Character character)
         {
             if(!__instance.IsActive) { return; }
-
+            if(__instance.item.Prefab.Identifier == "slipsuit".ToIdentifier()) { return; }
 
             Vector2 dir = character.CursorPosition - character.Position;
-
-            if(__instance.item.Prefab.Identifier == "slipsuit".ToIdentifier())
-            {
-                return;
-            }
 
             if(dir.Y * __instance.Force <= 0 || character.IsKeyDown(InputType.Crouch)) { return; }
 
@@ -767,7 +762,7 @@ namespace NoWater
         public static void OverrideGetImpactDamage(Ragdoll __instance, ref float __result, float impact, float? impactTolerance = null)
         {
 		    float tolerance = impactTolerance ?? __instance.ImpactTolerance;
-		    __result = (impact - tolerance) * 20f;
+		    __result = (impact - tolerance) * 10f;
             return;
         }
         public static void OverrideCalculateBuoyancy(SubmarineBody __instance, ref Vector2 __result)

@@ -21,6 +21,7 @@ CTS.roundStartFunctions.main = function ()
 		-- automations for sub editor
 		if CLIENT and Game.IsSingleplayer and Game.IsSubEditor then
 			local identifierResetSet = {
+				slipsuit = true,
 				cargoscooter = true,
 				underwaterscooter = true,
 				extinguisher = true,

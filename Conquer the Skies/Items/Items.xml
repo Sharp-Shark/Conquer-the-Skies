@@ -51,11 +51,13 @@
       <sprite name="SlipSuit Left Shoe" texture="%ModDir%/Items/slipsuit.png" limb="LeftFoot" sound="footstep_armor_heavy" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
       <sprite name="SlipSuit Right Shoe" texture="%ModDir%/Items/slipsuit.png" limb="RightFoot" sound="footstep_armor_heavy" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
       <sprite texture="%ModDir%/Items/slipsuit.png" canbehiddenbyotherwearables="false" rotation="85" depth="0.6" sourcerect="0,256,140,102" limb="Torso" depthlimb="Torso" scale="0.5" origin="0.5,0.95" />
-      <!--<StatValue stattype="SwimmingSpeed" value="0.45" />
-      <StatValue stattype="PropulsionSpeed" value="0.4" />
-      <StatValue stattype="WalkingSpeed" value="-0.2" />-->
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="blunttrauma" probabilitymultiplier="0.3" damagesound="LimbArmor"/>
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="gunshotwound,bitewounds,lacerations,bleeding,explosiondamage" damagemultiplier="0.75" damagesound="LimbArmor" deflectprojectiles="true" />
+      <StatValue stattype="WalkingSpeed" value="0.0" />
+      <StatValue stattype="SwimmingSpeed" value="0.0" />
+      <StatValue stattype="PropulsionSpeed" value="0.0" />
     </Wearable>
-    <Propulsion force="50" usablein="both" particles="steam">
+    <Propulsion force="40" usablein="both" particles="steam">
       <RequiredItems items="oxygentank" targetslot="0" type="Contained" msg="itemmsgoxygentankrequired" />
       <StatusEffect type="OnUse" target="Contained" targetslot="0" Condition="-1">
         <RequiredItem items="oxygentank" type="Contained" />
