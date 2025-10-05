@@ -3,6 +3,9 @@
   <!-- Room Names -->
   <roomname.deck>Deck</roomname.deck>
   
+  <entityname.mortarshell>Mortar Railgun Shell</entityname.mortarshell>
+  <entitydescription.mortarshell>Similar to be regular railgun shell, but has a more intense arc due to added weight. Can be loaded with additional explosives explosives that detonate upon impact.</entitydescription.mortarshell>
+
   <Override>
   <entityname.combatdivingsuit>Combat Suit</entityname.combatdivingsuit>
   <entitydescription.combatdivingsuit>An agile, lightweight suit designed for combat. Offers some protection against damage and withstands pressure up to a depth of 5,700 meters.</entitydescription.combatdivingsuit>
