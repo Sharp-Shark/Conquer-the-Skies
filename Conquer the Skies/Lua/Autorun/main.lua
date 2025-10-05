@@ -57,7 +57,7 @@ if SERVER then
 	Hook.Patch("Barotrauma.Networking.GameServer", "InitiateStartGame", function (instance, ptable)
 		if CTS.fleet == nil then return end
 
-		CTS.brick = CTS.fleet.AddSubmarine(CTS.path .. '/Submarines/HMS Brick.sub', 'HMS Brick', true)
+		--CTS.brick = CTS.fleet.AddSubmarine(CTS.path .. '/Submarines/HMS Brick.sub', 'HMS Brick', true)
 
 		ptable["selectedShuttle"] = CTS.fleet.BuildSubmarines()
 	end)
