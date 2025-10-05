@@ -5,7 +5,7 @@ if CTS == nil then CTS = {} end
 CTS.path = table.pack(...)[1]
 
 -- Load utilities/dependencies
-if File.Exists(CTS.path .. '/CTS/secret.lua') then
+if File.Exists(CTS.path .. '/Lua/CTS/secret.lua') then
 	require 'CTS/secret'
 end
 
