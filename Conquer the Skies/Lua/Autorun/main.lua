@@ -92,10 +92,10 @@ if SERVER then
 		teamCount[2] = 15 -- remove this line later when testing is over
 
 		local submarineInfo = ptable["selectedSub"]
-		local submarineCount = math.floor((teamCount[1] - 1) / math.max(1, submarineInfo.RecommendedCrewSizeMax))
+		local submarineCount = math.floor(teamCount[1] / math.max(1, submarineInfo.RecommendedCrewSizeMax))
 
 		local enemySubmarineInfo = table.pack(ptable["selectedEnemySub"].TryUnwrap())[2]
-		local enemySubmarineCount = math.floor((teamCount[2] - 1) / math.max(1, enemySubmarineInfo.RecommendedCrewSizeMax))
+		local enemySubmarineCount = math.floor(teamCount[2] / math.max(1, enemySubmarineInfo.RecommendedCrewSizeMax))
 		if Game.ServerSettings.GameModeIdentifier ~= 'pvp' then
 			enemySubmarineCount = 0
 		end
