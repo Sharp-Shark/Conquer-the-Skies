@@ -802,5 +802,56 @@ namespace NoWater
             velY *= -1; // only change compared to vanilla
             __instance.item.SendSignal(new Signal(velY.ToString(CultureInfo.InvariantCulture), 0, __instance.user), "velocity_y_out");
         }
-	}
+        public static void OverrideCheckWinCondition(ref bool __result)
+        {
+            __result = false;
+        }
+    }
 }
+
+/*
+public static Submarine SpawnSub(SubmarineInfo submarineInfo, Vector2 spawnPosition, bool flipX = false)
+{
+    Submarine spawnedSub = Submarine.Load(submarineInfo, false);
+    spawnedSub.SetPosition(spawnPosition);
+    if (flipX)
+    {
+        spawnedSub.FlipX();
+    }
+    return spawnedSub;
+}
+
+ON THE LUA SIDE OF THINGS
+
+-- Spawn submarines
+local spawnSubNotNetworked = NoWaterClass.Type.SpawnSub;
+CTS.spawnSub = function (submarineInfo, spawnPosition, flipX)
+    if CLIENT and Game.IsMultiplayer then return end
+    if submarineInfo == nil then return end
+    local submarineName = submarineInfo.Name
+    Timer.Wait(function ()
+        submarine = spawnSubNotNetworked(submarineInfo, spawnPosition, flipX)
+        submarine.LockX = false
+        submarine.LockY = false
+    end, 1000 * 10)
+    if SERVER then
+        local message = Networking.Start("spawnsub")
+        message.WriteString(filePath)
+        message.WriteSingle(spawnPosition.X)
+        message.WriteSingle(spawnPosition.Y)
+        message.WriteBoolean(flipX or false)
+        Networking.Send(message)
+    end
+end
+if CLIENT then
+    Networking.Receive("spawnsub", function (message, client)
+        local filePath = message.ReadString()
+        local spawnPosition = Vector2()
+        spawnPosition.X = message.ReadSingle()
+        spawnPosition.Y = message.ReadSingle()
+        flipX = message.ReadBoolean()
+        submarineInfo = SubmarineInfo(filePath)
+        spawnSubNotNetworked(submarineInfo, spawnPosition, flipX)
+    end)
+end
+*/

@@ -3,6 +3,16 @@
   <!-- Room Names -->
   <roomname.deck>Deck</roomname.deck>
   
+  <missiontype.FleetVsFleetCombat>Fleet vs. Fleet</missiontype.FleetVsFleetCombat>
+  <missionname.fleetmission>Search and destroy</missionname.fleetmission>
+  <missiondescriptionneutral.fleetmission>A Coalition fleet has been dispatched from [location1] to destroy a renegade flotilla at the outskirts of [location2].</missiondescriptionneutral.fleetmission>
+  <missiondescription1.fleetmission>A renegade flotilla has been detected at the outskirts of [location2]. Treason against the Europa Coalition is punishable by death—eliminate the renegades by any means necessary.</missiondescription1.fleetmission>
+  <missiondescription2.fleetmission>You're a member of the Jovian Separatists, a group opposing the Europa Coalition. According to your informants at [location1], a Coalition fleet has just been dispatched on a mission to take down your flotilla. Eliminate their ships by any means necessary.</missiondescription2.fleetmission>
+  <missionteam1.fleetmission>Coalition</missionteam1.fleetmission>
+  <missionteam2.fleetmission>Jovian Separatists</missionteam2.fleetmission>
+  <missionsuccess.fleetmission>The [loser] fleet has been defeated by the [winner]!</missionsuccess.fleetmission>
+  <missionfailure.fleetmission>Neither fleet managed to destroy the enemies.</missionfailure.fleetmission>
+
   <entityname.mortarshell>Mortar Railgun Shell</entityname.mortarshell>
   <entitydescription.mortarshell>Similar to be regular railgun shell, but has a more intense arc due to added weight. Can be loaded with additional explosives explosives that detonate upon impact.</entitydescription.mortarshell>
 
