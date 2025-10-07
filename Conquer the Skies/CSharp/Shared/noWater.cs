@@ -802,10 +802,6 @@ namespace NoWater
             velY *= -1; // only change compared to vanilla
             __instance.item.SendSignal(new Signal(velY.ToString(CultureInfo.InvariantCulture), 0, __instance.user), "velocity_y_out");
         }
-        public static void OverrideCheckWinCondition(ref bool __result)
-        {
-            __result = false;
-        }
     }
 }
 
