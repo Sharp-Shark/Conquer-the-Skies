@@ -1,5 +1,36 @@
 -- https://github.com/evilfactory/traitormod/blob/master/Lua/submarinebuilder.lua
 
+CTS.FlipSubmarine = function (submarine, flipCharacters)
+    submarine.FlipX()
+    if flipCharacters then
+        for character in Character.CharacterList do
+            if character.Submarine == submarine then
+                local offsetX = character.WorldPosition.X - submarine.WorldPosition.X
+                character.TeleportTo(Vector2(submarine.WorldPosition.X - offsetX, character.WorldPosition.Y))
+            end
+        end
+    end
+    if SERVER then
+        local message = Networking.Start("syncsubflippedx")
+        message.WriteUInt16(submarine.ID)
+        message.WriteBoolean(submarine.FlippedX)
+        Networking.Send(message)
+    end
+end
+
+--[[ flips sub so it faces the way it is going
+CTS.thinkFunctions.main = function ()
+	for submarine in Submarine.Loaded do
+        if submarine.FlippedX and submarine.Velocity.X >= 1 then
+            CTS.FlipSubmarine(submarine, true)
+        end
+        if not submarine.FlippedX and submarine.Velocity.X <= -1 then
+            CTS.FlipSubmarine(submarine, true)
+        end
+	end
+end
+]]--
+
 if CLIENT then
     Networking.Receive("syncsubflippedx", function (message, client)
         local id = message.ReadUInt16()
@@ -16,9 +47,13 @@ end
 
 Game.OverrideRespawnSub(true) -- remove respawn submarine logic
 
+local linkedSubmarineHeader = [[<LinkedSubmarine description="" checkval="2040186250" price="1000" initialsuppliesspawned="false" type="Player" tags="Shuttle" gameversion="0.17.4.0" dimensions="1270,451" cargocapacity="0" recommendedcrewsizemin="1" recommendedcrewsizemax="2" recommendedcrewexperience="Unknown" requiredcontentpackages="Vanilla" name="%s" filepath="Content/Submarines/Selkie.sub" pos="-64,-392.5" linkedto="4" originallinkedto="0" originalmyport="0">%s</LinkedSubmarine>]]
+
 CTS.fleet = {}
 
-local linkedSubmarineHeader = [[<LinkedSubmarine description="" checkval="2040186250" price="1000" initialsuppliesspawned="false" type="Player" tags="Shuttle" gameversion="0.17.4.0" dimensions="1270,451" cargocapacity="0" recommendedcrewsizemin="1" recommendedcrewsizemax="2" recommendedcrewexperience="Unknown" requiredcontentpackages="Vanilla" name="%s" filepath="Content/Submarines/Selkie.sub" pos="-64,-392.5" linkedto="4" originallinkedto="0" originalmyport="0">%s</LinkedSubmarine>]]
+CTS.fleet.Fleets = {}
+
+CTS.fleet.FlipSubmarine = CTS.FlipSubmarine
 
 CTS.fleet.IsActive = function ()
     return Game.GetRespawnSub() ~= nil
@@ -46,6 +81,7 @@ CTS.fleet.UpdateLobby = function(submarineInfo)
 end
 
 CTS.fleet.Submarines = {}
+CTS.fleet.SubmarineFleet = {}
 
 CTS.fleet.AddSubmarine = function (path, name, isTemporary, fleet)
     isTemporary = isTemporary or false
@@ -132,30 +168,66 @@ CTS.fleet.RoundStart = function ()
         CTS.fleet.ResetSubmarineSteering(submarine)
     end
 
-    local fleets = {
-        [1] = Submarine.MainSub,
+    CTS.fleet.Fleets = {
+        [1] = {
+            TeamID = 1,
+            CrewPerSub = Submarine.MainSub.Info.RecommendedCrewSizeMax,
+            Main = Submarine.MainSub,
+            Anchor = Submarine.MainSub,
+            Subs = {Submarine.MainSub},
+            Crew = {},
+            SubCrew = {[Submarine.MainSub] = {}}
+        },
+        [2] = {
+            TeamID = 2,
+            CrewPerSub = 1,
+            Subs = {},
+            Crew = {},
+            SubCrew = {}
+        },
     }
+    CTS.fleet.SubmarineFleet[Submarine.MainSub] = CTS.fleet.Fleets[1]
     for submarine in Submarine.Loaded do
         if submarine.TeamID == CharacterTeamType.Team2 then
-            fleets[2] = submarine
+            CTS.fleet.Fleets[2].CrewPerSub = Submarine.MainSub.Info.RecommendedCrewSizeMax
+            CTS.fleet.Fleets[2].Main = submarine
+            CTS.fleet.Fleets[2].Anchor = submarine
+            CTS.fleet.Fleets[2].Subs = {submarine}
+            CTS.fleet.Fleets[2].SubCrew[submarine] = {}
+            CTS.fleet.SubmarineFleet[submarine] = CTS.fleet.Fleets[2]
+            break
         end
     end
-    --[[
-    local crews = {
-        [1] = {},
-        [2] = {},
-    }
-    ]]--
+    for character in Character.CharacterList do
+        if CTS.fleet.Fleets[character.TeamID] ~= nil then
+            table.insert(CTS.fleet.Fleets[character.TeamID].Crew, character)
+        end
+    end
+
     for tbl in CTS.fleet.Submarines do
         if tbl.Fleet ~= nil then
             local submarine = CTS.fleet.FindSubmarine(tbl.Name)
-            if fleets[tbl.Fleet] ~= nil then
-                CTS.fleet.InitSubmarineToFleet(submarine, fleets[tbl.Fleet])
-                --[[
-                for character in Character.CharacterList do
-                end
-                ]]-- CODE THAT MOVES PLAYERS FROM OVERPOPULATED SHIPS TO UNDERPOPULATED ONES WOULD GO HERE
-                fleets[tbl.Fleet] = submarine
+            if CTS.fleet.Fleets[tbl.Fleet] ~= nil then
+                CTS.fleet.InitSubmarineToFleet(submarine, CTS.fleet.Fleets[tbl.Fleet])
+            end
+        end
+    end
+    CTS.fleet.Fleets[1].CrewPerSub = math.ceil(#CTS.fleet.Fleets[1].Crew / math.max(1, #CTS.fleet.Fleets[1].Subs))
+    CTS.fleet.Fleets[2].CrewPerSub = math.ceil(#CTS.fleet.Fleets[2].Crew / math.max(1, #CTS.fleet.Fleets[2].Subs))
+
+    -- spread crew among fleet
+    for fleet in CTS.fleet.Fleets do
+        local submarineIndex = 1
+        for character in fleet.Crew do
+            submarine = fleet.Subs[submarineIndex]
+
+            local waypoint = CTS.findRandomWaypointByJob(submarine, character.JobIdentifier)
+            if waypoint == nil then waypoint = CTS.findRandomWaypointByJob(submarine, '') end
+            character.TeleportTo(waypoint.WorldPosition)
+
+            table.insert(fleet.SubCrew[submarine], character)
+            if #fleet.SubCrew[submarine] >= fleet.CrewPerSub then
+                submarineIndex = math.min(#fleet.Subs, submarineIndex + 1)
             end
         end
     end
@@ -175,27 +247,17 @@ CTS.fleet.MoveSubmarineToOther = function (sub1, sub2, vector)
     sub1.EnableMaintainPosition()
 end
 
-CTS.fleet.InitSubmarineToFleet = function (submarine, parent, vector)
+CTS.fleet.InitSubmarineToFleet = function (submarine, fleet, vector)
+    local parent = fleet.Anchor
     CTS.fleet.MoveSubmarineToOther(submarine, parent, vector)
     submarine.TeamID = parent.TeamID
     submarine.GodMode = false
     if submarine.FlippedX ~= parent.FlippedX then CTS.fleet.FlipSubmarine(submarine) end
-end
 
-CTS.fleet.FlipSubmarine = function (submarine, flipCharacters)
-    submarine.FlipX()
-    if flipCharacters then
-        for character in Character.CharacterList do
-            if character.Submarine == submarine then
-                local offsetX = character.WorldPosition.X - submarine.WorldPosition.X
-                character.TeleportTo(Vector2(submarine.WorldPosition.X - offsetX, character.WorldPosition.Y))
-            end
-        end
-    end
-    local message = Networking.Start("syncsubflippedx")
-    message.WriteUInt16(submarine.ID)
-    message.WriteBoolean(submarine.FlippedX)
-    Networking.Send(message)
+    table.insert(fleet.Subs, submarine)
+    fleet.SubCrew[submarine] = {}
+    fleet.Anchor = submarine
+    CTS.fleet.SubmarineFleet[submarine] = fleet
 end
 
 CTS.fleet.pruned = false
@@ -218,6 +280,7 @@ end
 
 Hook.Add("roundEnd", "SubmarineBuilder.RoundEnd", function ()
     CTS.fleet.pruned = false
+    CTS.fleet.Fleets = {}
     for key, value in pairs(CTS.fleet.Submarines) do
         if value.IsTemporary then
             CTS.fleet.Submarines[key] = nil

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LevelGenerationParameters>
+  <Biomes>
+    <Biome
+      identifier="openskies"
+      name="Open Skies"
+      description=""
+      AllowedZones="1"
+      ExperienceFromMissionRewards="0.09"
+      mindifficulty="0"
+      maxdifficulty="15">
+      <Submarines maxtier="1" />
+    </Biome>
+  </Biomes>
+</LevelGenerationParameters>

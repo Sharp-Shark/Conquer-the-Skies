@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LevelGenerationParameters>
+  <OpenSkiesBasic
+    identifier="openskiesbasic"
+    type="LocationConnection"
+    biomes="openskies"
+    height="60000"
+    initialdepthmin="300000"
+    initialdepthmax="400000"
+    levelobjectamount="8000"
+    ambientlightcolor="185, 185, 155, 255"
+    backgroundtexturecolor="50, 115, 170, 255"
+    backgroundcolor="50, 115, 170, 255"
+    wallcolor="255,255,255,255"
+    minwidth="180000"
+    maxwidth="250000"
+    voronoisiteinterval="2000,2000"
+    voronoisitevariance="800,800"
+    CellSubdivisionLength="1000"
+    CellRoundingAmount="0.35"
+    CellIrregularity="0.2"
+    mainpathnodeintervalrange="10000,20000"
+    cavecount="0"
+    itemcount="400"
+    floatingicechunkcount="0"
+    seafloordepth="-30000"
+    seafloorvariance="500"
+    mountaincountmin="1"
+    mountaincountmax="2"
+    mountainheightmin="1000"
+    mountainheightmax="5000"
+    minruincount="0"
+    maxruincount="0"
+    minwreckcount="0"
+    maxwreckcount="1"
+    thalamusprobability="0.3"
+    bottomholeprobability="0.7"
+    waterparticlescale="1"
+    startposition="0.1,0.1"
+    endposition="0.9,0.5"
+    createholenexttoend="True"
+    mintunnelradius="6500"
+    mincorpsecount="3"
+    maxcorpsecount="6"
+    huskprobability="0.1"
+    WreckHullFloodingChance="0.25"
+    WreckFloodingHullMinWaterPercentage="0.1"
+    WreckFloodingHullMaxWaterPercentage="0.3"
+    sidetunnelcount="1,1"
+    minsidetunnelradius="1000,3000"
+    icespirecount="0"
+    walltexturesize="512"
+    walledgetexturewidth="1024"
+    walledgeexpandoutwardsamount="128"
+    walledgeexpandinwardsamount="128"
+    backgroundcreatureamount="80"
+    islandcount="0"
+    sidetunnelvariance="0.5"
+    mainpathvariance="0.5"
+    resourceintervalrange="19200,38400"
+    caveresourceintervalrange="9600,19200"
+    resourceclustersizerange="3,6"
+    resourcespawnchance="0.3"
+    caveresourcespawnchance="0.6"
+    AbyssResourceClustersMin="30"
+    AbyssResourceClustersMax="40">
+    <!--
+    <Background
+      texture="Content/Map/iceBackgroundFade.png" />
+    <BackgroundTop
+      texture="Content/Map/iceBackground.png"
+      premultiplyalpha="false" />
+      -->
+    <WaterParticles
+      texture="%ModDir%/Biomes/Open Skies/BackgroundParticles.png" />
+    <Wall
+      texture="%ModDir%/Biomes/Open Skies/LevelWall.png"
+      premultiplyalpha="false" />
+    <WallEdge
+      texture="%ModDir%/Biomes/Open Skies/LevelWallEdge.png" />
+    <DestructibleWall
+      texture="Content/Map/Biomes/DestructibleWall.png" />
+    <DestructibleWallEdge
+      texture="Content/Map/Biomes/DestructibleWallEdge.png" />
+    <WallDestroyed
+      texture="Content/Map/Biomes/DestroyedWall.png"
+      premultiplyalpha="false" />
+  </OpenSkiesBasic>
+  <OpenSkiesPvP
+    identifier="openskies_pvp"
+    biomes="openskies"
+    Commonness="100"
+    Type="LocationConnection"
+    IsPvPLevel="True"
+    ambientlightcolor="185, 185, 155, 255"
+    backgroundtexturecolor="50, 115, 170, 255"
+    backgroundcolor="50, 115, 170, 255"
+    WallColor="255,255,255,255"
+    WaterParticleColor="255,255,255,255"
+    StartPosition="0.1,0.5"
+    EndPosition="0.9,0.5"
+    ForceOutpostPosition="0,0"
+    CreateHoleNextToEnd="False"
+    CreateHoleToAbyss="True"
+    NoLevelGeometry="False"
+    LevelObjectAmount="8000"
+    BackgroundCreatureAmount="80"
+    MinWidth="90000"
+    MaxWidth="95000"
+    Height="90000"
+    InitialDepthMin="300000"
+    InitialDepthMax="400000"
+    MinTunnelRadius="6500"
+    SideTunnelCount="2,3"
+    SideTunnelVariance="1"
+    MinSideTunnelRadius="1500,5000"
+    VoronoiSiteInterval="2000,2000"
+    VoronoiSiteVariance="800,800"
+    CellSubdivisionLength="1000"
+    CellRoundingAmount="0.35"
+    CellIrregularity="0.2"
+    MainPathNodeIntervalRange="10000,20000"
+    MainPathVariance="0.5"
+    CaveCount="0"
+    ItemCount="400"
+    ResourceIntervalRange="19200,38400"
+    CaveResourceIntervalRange="9600,19200"
+    ResourceClusterSizeRange="3,6"
+    ResourceSpawnChance="0.3"
+    CaveResourceSpawnChance="0.6"
+    FloatingIceChunkCount="0"
+    IslandCount="0"
+    IceSpireCount="0"
+    AbyssIslandCount="5"
+    AbyssIslandSizeMin="4000,7000"
+    AbyssIslandSizeMax="8000,10000"
+    AbyssIslandCaveProbability="0.5"
+    AbyssResourceClustersMin="30"
+    AbyssResourceClustersMax="40"
+    SeaFloorDepth="-30000"
+    SeaFloorVariance="500"
+    MountainCountMin="1"
+    MountainCountMax="2"
+    MountainHeightMin="1000"
+    MountainHeightMax="5000"
+    RuinCount="0"
+    MinWreckCount="0"
+    MaxWreckCount="1"
+    MinCorpseCount="3"
+    MaxCorpseCount="6"
+    huskprobability="0.1"
+    ThalamusProbability="0.3"
+    WreckHullFloodingChance="0.25"
+    WreckFloodingHullMinWaterPercentage="0.1"
+    WreckFloodingHullMaxWaterPercentage="0.3"
+    ForceBeaconStation=""
+    BottomHoleProbability="0.3"
+    WaterParticleScale="1"
+    WaterParticleVelocity="0,10"
+    WallTextureSize="512"
+    WallEdgeTextureWidth="1024"
+    FlashInterval="0,0"
+    FlashColor="0,0,0,0"
+    PlayNoiseLoopInOutpostLevel="False"
+    WaterAmbienceVolume="1"
+    WallEdgeExpandOutwardsAmount="128"
+    WallEdgeExpandInwardsAmount="128">
+    <WaterParticles
+      texture="%ModDir%/Biomes/Open Skies/BackgroundParticles.png" />
+    <Wall
+      texture="%ModDir%/Biomes/Open Skies/LevelWall.png"
+      premultiplyalpha="false" />
+    <WallEdge
+      texture="%ModDir%/Biomes/Open Skies/LevelWallEdge.png" />
+    <DestructibleWall
+      texture="Content/Map/Biomes/DestructibleWall.png" />
+    <DestructibleWallEdge
+      texture="Content/Map/Biomes/DestructibleWallEdge.png" />
+    <WallDestroyed
+      texture="Content/Map/Biomes/DestroyedWall.png"
+      premultiplyalpha="false" />
+  </OpenSkiesPvP>
+</LevelGenerationParameters>

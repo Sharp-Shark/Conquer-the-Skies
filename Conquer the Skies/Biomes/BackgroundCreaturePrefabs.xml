@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<backgroundcreatures>
+
+  <Cloud1 speed="20.0" wanderamount="0.1" wanderzamount="0.1" swarmmin="1" swarmmax="1" scale="8.0" disablerotation="true" disableflipping="true" mindepth="5000" maxdepth="7000" fadeout="true" commonness="0">
+    <overridecommonness leveltype="openskies" commonness="10" />
+    <Sprite texture="%ModDir%/Biomes/clouds.png" sourcerect="0,0,1311,474" origin="0.5,0.5"/>
+  </Cloud1>
+  <Cloud2 speed="20.0" wanderamount="0.1" wanderzamount="0.1" swarmmin="1" swarmmax="1" scale="8.0" disablerotation="true" disableflipping="true" mindepth="5000" maxdepth="7000" fadeout="true" commonness="0">
+    <overridecommonness leveltype="openskies" commonness="10" />
+    <Sprite texture="%ModDir%/Biomes/clouds.png" sourcerect="1311,0,1148,422" origin="0.5,0.5"/>
+  </Cloud2>
+  <Cloud3 speed="20.0" wanderamount="0.1" wanderzamount="0.1" swarmmin="1" swarmmax="1" scale="8.0" disablerotation="true" disableflipping="true" mindepth="5000" maxdepth="7000" fadeout="true" commonness="0">
+    <overridecommonness leveltype="openskies" commonness="10" />
+    <Sprite texture="%ModDir%/Biomes/clouds.png" sourcerect="0,474,2424,795" origin="0.5,0.5"/>
+  </Cloud3>
+  <Cloud4 speed="20.0" wanderamount="0.1" wanderzamount="0.1" swarmmin="1" swarmmax="1" scale="8.0" disablerotation="true" disableflipping="true" mindepth="5000" maxdepth="7000" fadeout="true" commonness="0">
+    <overridecommonness leveltype="openskies" commonness="10" />
+    <Sprite texture="%ModDir%/Biomes/clouds.png" sourcerect="0,1269,996,428" origin="0.5,0.5"/>
+  </Cloud4>
+  <Cloud5 speed="20.0" wanderamount="0.1" wanderzamount="0.1" swarmmin="1" swarmmax="1" scale="8.0" disablerotation="true" disableflipping="true" mindepth="5000" maxdepth="7000" fadeout="true" commonness="0">
+    <overridecommonness leveltype="openskies" commonness="10" />
+    <Sprite texture="%ModDir%/Biomes/clouds.png" sourcerect="996,1269,1395,502" origin="0.5,0.5"/>
+  </Cloud5>
+  <Cloud6 speed="20.0" wanderamount="0.1" wanderzamount="0.1" swarmmin="1" swarmmax="1" scale="8.0" disablerotation="true" disableflipping="true" mindepth="5000" maxdepth="7000" fadeout="true" commonness="0">
+    <overridecommonness leveltype="openskies" commonness="10" />
+    <Sprite texture="%ModDir%/Biomes/clouds.png" sourcerect="2459,0,878,424" origin="0.5,0.5"/>
+  </Cloud6>
+  <Cloud7 speed="20.0" wanderamount="0.1" wanderzamount="0.1" swarmmin="1" swarmmax="1" scale="8.0" disablerotation="true" disableflipping="true" mindepth="5000" maxdepth="7000" fadeout="true" commonness="0">
+    <overridecommonness leveltype="openskies" commonness="10" />
+    <Sprite texture="%ModDir%/Biomes/clouds.png" sourcerect="2764,1507,471,164" origin="0.5,0.5"/>
+  </Cloud7>
+  <Cloud8 speed="20.0" wanderamount="0.1" wanderzamount="0.1" swarmmin="1" swarmmax="1" scale="8.0" disablerotation="true" disableflipping="true" mindepth="5000" maxdepth="7000" fadeout="true" commonness="0">
+    <overridecommonness leveltype="openskies" commonness="10" />
+    <Sprite texture="%ModDir%/Biomes/clouds.png" sourcerect="2798,1283,437,224" origin="0.5,0.5"/>
+  </Cloud8>
+  <Cloud9 speed="20.0" wanderamount="0.1" wanderzamount="0.1" swarmmin="1" swarmmax="1" scale="8.0" disablerotation="true" disableflipping="true" mindepth="5000" maxdepth="7000" fadeout="true" commonness="0">
+    <overridecommonness leveltype="openskies" commonness="10" />
+    <Sprite texture="%ModDir%/Biomes/clouds.png" sourcerect="2702,424,635,286" origin="0.5,0.5"/>
+  </Cloud9>
+  <Cloud10 speed="20.0" wanderamount="0.1" wanderzamount="0.1" swarmmin="1" swarmmax="1" scale="8.0" disablerotation="true" disableflipping="true" mindepth="5000" maxdepth="7000" fadeout="true" commonness="0">
+    <overridecommonness leveltype="openskies" commonness="10" />
+    <Sprite texture="%ModDir%/Biomes/clouds.png" sourcerect="2424,1283,374,133" origin="0.5,0.5"/>
+  </Cloud10>
+  <Cloud11 speed="20.0" wanderamount="0.1" wanderzamount="0.1" swarmmin="1" swarmmax="1" scale="8.0" disablerotation="true" disableflipping="true" mindepth="5000" maxdepth="7000" fadeout="true" commonness="0">
+    <overridecommonness leveltype="openskies" commonness="10" />
+    <Sprite texture="%ModDir%/Biomes/clouds.png" sourcerect="2424,710,987,306" origin="0.5,0.5"/>
+  </Cloud11>
+  <Cloud12 speed="20.0" wanderamount="0.1" wanderzamount="0.1" swarmmin="1" swarmmax="1" scale="8.0" disablerotation="true" disableflipping="true" mindepth="5000" maxdepth="7000" fadeout="true" commonness="0">
+    <overridecommonness leveltype="openskies" commonness="10" />
+    <Sprite texture="%ModDir%/Biomes/clouds.png" sourcerect="2424,1016,947,267" origin="0.5,0.5"/>
+  </Cloud12>
+
+</backgroundcreatures>

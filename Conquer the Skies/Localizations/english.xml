@@ -3,6 +3,11 @@
   <!-- Room Names -->
   <roomname.deck>Deck</roomname.deck>
   
+  <biomename.openskies>Open Skies</biomename.openskies>
+  <Override>
+  <biomename.thegreatsea>The Great Void</biomename.thegreatsea>
+  </Override>
+
   <missiontype.FleetVsFleetCombat>Fleet vs. Fleet</missiontype.FleetVsFleetCombat>
   <missionname.fleetmission>Search and destroy</missionname.fleetmission>
   <missiondescriptionneutral.fleetmission>A Coalition fleet has been dispatched from [location1] to destroy a renegade flotilla at the outskirts of [location2].</missiondescriptionneutral.fleetmission>
