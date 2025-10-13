@@ -22,6 +22,10 @@
   <entitydescription.mortarshell>Similar to be regular railgun shell, but has a more intense arc due to added weight. Can be loaded with additional explosives explosives that detonate upon impact.</entitydescription.mortarshell>
 
   <Override>
+  <entityname.abyssdivingsuit>Heavy Suit</entityname.abyssdivingsuit>
+  <entitydescription.abyssdivingsuit>A cumbersome but sturdy suit designed for ship defense. Protects against damage and high pressure up to 6,600 meters. Due to the weight, powered flight is not possible and walking speed is slow.</entitydescription.abyssdivingsuit>
+  <entityname.abyssdivingsuit>Heavy Suit</entityname.abyssdivingsuit>
+  <entitydescription.abyssdivingsuit>A cumbersome but sturdy suit designed for ship defense. Protects against damage and high pressure up to 6,600 meters. Due to the weight, powered flight is not possible and walking speed is slow.</entitydescription.abyssdivingsuit>
   <entityname.combatdivingsuit>Combat Suit</entityname.combatdivingsuit>
   <entitydescription.combatdivingsuit>An agile, lightweight suit designed for combat. Offers some protection against damage and withstands pressure up to a depth of 5,700 meters.</entitydescription.combatdivingsuit>
   <entityname.slipsuit>Jetsuit</entityname.slipsuit>

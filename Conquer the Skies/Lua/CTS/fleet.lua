@@ -18,8 +18,10 @@ CTS.FlipSubmarine = function (submarine, flipCharacters)
     end
 end
 
---[[ flips sub so it faces the way it is going
-CTS.thinkFunctions.main = function ()
+CTS.autoSubFlip = false
+CTS.thinkFunctions.subflip = function ()
+    if not CTS.autoSubFlip then return end
+
 	for submarine in Submarine.Loaded do
         if submarine.FlippedX and submarine.Velocity.X >= 1 then
             CTS.FlipSubmarine(submarine, true)
@@ -29,7 +31,6 @@ CTS.thinkFunctions.main = function ()
         end
 	end
 end
-]]--
 
 if CLIENT then
     Networking.Receive("syncsubflippedx", function (message, client)
