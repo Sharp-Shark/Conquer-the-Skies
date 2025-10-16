@@ -2,6 +2,8 @@
 <infotexts language="English" nowhitespace="false" translatedname="English">
   <!-- Room Names -->
   <roomname.deck>Deck</roomname.deck>
+
+  <label.launchaerialcharge>Launch Aerial Charge</label.launchaerialcharge>
   
   <biomename.openskies>Open Skies</biomename.openskies>
   <Override>
@@ -18,6 +20,8 @@
   <missionsuccess.fleetmission>The [loser] fleet has been defeated by the [winner]!</missionsuccess.fleetmission>
   <missionfailure.fleetmission>Neither fleet managed to destroy the enemies.</missionfailure.fleetmission>
 
+  <entityname.aerialchargeshell>Aerial Charge Shell</entityname.aerialchargeshell>
+  <entitydescription.aerialchargeshell>A tank of suspendium and a payload. Will float up and then explode.</entitydescription.aerialchargeshell>
   <entityname.mortarshell>Mortar Railgun Shell</entityname.mortarshell>
   <entitydescription.mortarshell>Similar to be regular railgun shell, but has a more intense arc due to added weight. Can be loaded with additional explosives explosives that detonate upon impact.</entitydescription.mortarshell>
 

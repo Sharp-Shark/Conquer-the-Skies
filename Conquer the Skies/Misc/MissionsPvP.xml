@@ -7,7 +7,7 @@
     multiplayeronly="true"
     commonness="100"
     reward="2000"
-    allowrespawning="true"
+    allowrespawning="false"
     wincondition="LastManStanding">
     <!-- no outposts at either end of the level -->
     <LocationType from="None" to="None"/>

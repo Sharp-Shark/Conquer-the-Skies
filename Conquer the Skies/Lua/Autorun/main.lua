@@ -4,48 +4,22 @@ if CTS == nil then CTS = {} end
 -- Set up the mod's path
 CTS.path = table.pack(...)[1]
 
+-- Get access to the C#
+CTS.NoWaterClass = LuaUserData.RegisterType('NoWater.NoWaterMod')
+
 -- Load utilities/dependencies
 if File.Exists(CTS.path .. '/Lua/CTS/secret.lua') then
 	require 'CTS/secret'
 end
 
--- Make accessible to lua
-LuaUserData.MakeMethodAccessible(Descriptors["Barotrauma.Level"], "get_RandomHash")
-
--- Utility
--- Find waypoints by job
-CTS.findWaypointsByJob = function (submarine, job)
-	local waypoints = {}
-	for waypoint in submarine.GetWaypoints(false) do
-		if (waypoint.AssignedJob ~= nil) and (waypoint.AssignedJob.Identifier == job) then
-			table.insert(waypoints, waypoint)
-		end
-	end
-	if (job == '') and (#waypoints < 1) then
-		for waypoint in submarine.GetWaypoints(false) do
-			if waypoint.SpawnType == SpawnType.Human then
-				table.insert(waypoints, waypoint)
-			end
-		end
-		
-	end
-	return waypoints
-end
-
--- Find one random waypoint of a job
-CTS.findRandomWaypointByJob = function (submarine, job)
-	local waypoints = CTS.findWaypointsByJob(submarine, job)
-	return waypoints[math.random(#waypoints)]
-end
-
 -- Functions executed at round start
 CTS.roundStartFunctions = {}
-local doRoundStartFunctions = function ()
+local doRoundStartFunctions = function (luaReloaded)
 	for name, func in pairs(CTS.roundStartFunctions) do
-		func()
+		func(luaReloaded)
 	end
 end
-CTS.roundStartFunctions.main = function ()
+CTS.roundStartFunctions.main = function (luaReloaded)
 	if Submarine.MainSub ~= nil then
 		-- automations for sub editor
 		if CLIENT and Game.IsSingleplayer and Game.IsSubEditor then
@@ -65,10 +39,60 @@ CTS.roundStartFunctions.main = function ()
 		end
 	end
 
-	if CTS.fleet == nil then return end
-	CTS.fleet.RoundStart()
+	-- do not spread spread crew if this method was caused due to lua being reloaded
+	if luaReloaded then return end
+
+	local teamData = {
+		[1] = {
+			crew = {},
+			submarines = {Submarine.MainSubs[1]},
+			crewPerSub = 0,
+			anchor = Submarine.MainSubs[1],
+		},
+		[2] = {
+			crew = {},
+			submarines = {Submarine.MainSubs[2]},
+			crewPerSub = 0,
+			anchor = Submarine.MainSubs[2],
+		},
+	}
+
+    for character in Character.CharacterList do
+		if teamData[character.TeamID] ~= nil then
+			table.insert(teamData[character.TeamID].crew, character)
+		end
+	end
+
+	local submarines = CTS.NoWaterClass.Type.submarines
+	for submarine in submarines do
+		if teamData[submarine.TeamID] ~= nil then
+			table.insert(teamData[submarine.TeamID].submarines, submarine)
+		end
+	end
+
+	teamData[1].crewPerSub = math.ceil(#teamData[1].crew / math.max(1, #teamData[1].submarines))
+	teamData[2].crewPerSub = math.ceil(#teamData[2].crew / math.max(1, #teamData[2].submarines))
+
+	for team, data in pairs(teamData) do
+        local submarineIndex = 1
+		local submarineCrewCount = 0
+		for character in data.crew do
+			local submarine = data.submarines[submarineIndex]
+
+			local waypoint = CTS.findRandomWaypointByJob(submarine, character.JobIdentifier)
+			if waypoint == nil then waypoint = CTS.findRandomWaypointByJob(submarine, '') end
+			character.TeleportTo(waypoint.WorldPosition)
+
+			submarineCrewCount = submarineCrewCount + 1
+			if submarineCrewCount >= data.crewPerSub then
+				submarineIndex = math.min(#data.submarines, submarineIndex + 1)
+				submarineCrewCount = 0
+			end
+		end
+    end
 end
 
+-- Think functions
 CTS.thinkFunctions = {}
 CTS.newThinkFunctions = {}
 local doThinkFunctions = function ()
@@ -81,29 +105,8 @@ local doThinkFunctions = function ()
 	end
 end
 
--- Load other files
-require 'CTS/utilities'
-require 'CTS/fleet'
-require 'CTS/networking/server'
-
--- Execute at round start
-Hook.Add("roundStart", "CTS.prepareRound", function ()
-
-	doRoundStartFunctions()
-	
-	return true
-end)
-
--- Executes constantly
-CTS.thinkCounter = 0
-Hook.Add("think", "DD.think", function ()
-	CTS.thinkCounter = CTS.thinkCounter + 1
-	
-	doThinkFunctions()
-	
-	return true
-end)
-CTS.thinkFunctions.main = function ()
+-- Sets ambient light and background for open skies biome
+CTS.thinkFunctions.openskies = function ()
     if Level.Loaded == nil or Level.Loaded.LevelData.Biome.Identifier ~= 'openskies' then return end
 
 	local parameters = Level.Loaded.LevelData.GenerationParams
@@ -123,64 +126,64 @@ CTS.thinkFunctions.main = function ()
 	end
 end
 
--- Pre-Start
-if SERVER then
-	LuaUserData.RegisterType('Barotrauma.Option`1[[Barotrauma.SubmarineInfo]],BarotraumaCore')
-	Hook.Patch("Barotrauma.Networking.GameServer", "InitiateStartGame", function (instance, ptable)
-		if CTS.fleet == nil then return end
-
-		local teamCount = {[1] = 0, [2] = 0}
-		for client in Client.ClientList do
-			if teamCount[client.TeamID] == nil then teamCount[client.TeamID] = 0 end
-			teamCount[client.TeamID] = teamCount[client.TeamID] + 1
+-- Manages submarine flippedX
+CTS.autoSubFlip = false
+local syncsubflippedx_next = Timer.Time + 1
+CTS.thinkFunctions.syncsubflippedx = function ()
+    local time = Timer.Time
+	local syncsubflippedx = SERVER and (time >= syncsubflippedx_next)
+    for submarine in Submarine.Loaded do
+		if CTS.autoSubFlip then
+			if submarine.FlippedX and submarine.Velocity.X >= 1 then
+				CTS.flipSubmarine(submarine, true)
+			end
+			if not submarine.FlippedX and submarine.Velocity.X <= -1 then
+				CTS.flipSubmarine(submarine, true)
+			end
 		end
-
-		if Game.ServerSettings.BotSpawnMode == 0 then
-			-- Normal
-			teamCount[1] = teamCount[1] + Game.ServerSettings.BotCount
-			teamCount[2] = teamCount[2] + Game.ServerSettings.BotCount
-		elseif Game.ServerSettings.BotSpawnMode == 1 then
-			-- Fill
-			teamCount[1] = math.max(teamCount[1], Game.ServerSettings.BotCount)
-			teamCount[2] = math.max(teamCount[2], Game.ServerSettings.BotCount)
+		if syncsubflippedx then
+        	local message = Networking.Start("syncsubflippedx")
+        	message.WriteUInt16(submarine.ID)
+        	message.WriteBoolean(submarine.FlippedX)
+        	Networking.Send(message)
 		end
-
-		local submarineInfo = ptable["selectedSub"]
-		local submarineCount = math.max(0, math.ceil(teamCount[1] / math.max(1, submarineInfo.RecommendedCrewSizeMax)) - 1)
-
-		local enemySubmarineInfo = table.pack(ptable["selectedEnemySub"].TryUnwrap())[2]
-		local enemySubmarineCount = math.max(0, math.ceil(teamCount[2] / math.max(1, enemySubmarineInfo.RecommendedCrewSizeMax)) - 1)
-		if Game.ServerSettings.GameModeIdentifier ~= 'pvp' then
-			enemySubmarineCount = 0
-		end
-
-		-- for some reason the first submarine the auto-injector places gets bugged, so I spawn this one first and later remove it
-		CTS.fleet.padding = CTS.fleet.AddSubmarine(submarineInfo.FilePath, 'sacrifice_for_the_lua_gods', true)
-
-		for i = 1, submarineCount do
-			CTS.fleet.AddSubmarine(submarineInfo.FilePath, 'Coalition Submarine #' .. (i + 1), true, 1)
-		end
-
-		for i = 1, enemySubmarineCount do
-			CTS.fleet.AddSubmarine(enemySubmarineInfo.FilePath, 'Separatist Submarine #' .. (i + 1), true, 2)
-		end
-
-		ptable["selectedShuttle"] = CTS.fleet.BuildSubmarines()
-	end)
+    end
+	if syncsubflippedx then syncsubflippedx_next = time + 1 end
+end
+if CLIENT then
+    Networking.Receive("syncsubflippedx", function (message, client)
+        local id = message.ReadUInt16()
+        local flippedX = message.ReadBoolean()
+        for submarine in Submarine.Loaded do
+            if (submarine.ID == id) and (submarine.FlippedX ~= flippedX) then
+                submarine.FlipX()
+            end
+        end
+    end)
 end
 
--- Used to pose NPCs for screenshots
-CTS.freeze = function (character, bool)
-	local value = 0
-	if bool then value = 2 end
+-- Load other files
+require 'CTS/utilities'
+require 'CTS/networking/server'
+require 'CTS/luahooks'
+
+-- Execute at round start
+Hook.Add("roundStart", "CTS.prepareRound", function ()
+
+	doRoundStartFunctions()
 	
-	character.AnimController.Collider.BodyType = value
-	for limb in character.AnimController.Limbs do
-		limb.body.BodyType = value
-	end
+	return true
+end)
+
+-- Executes constantly
+CTS.thinkCounter = 0
+Hook.Add("think", "DD.think", function ()
+	CTS.thinkCounter = CTS.thinkCounter + 1
 	
-	print(character, ' state: ', value)
-end
+	doThinkFunctions()
+	
+	return true
+end)
 
 -- Round start functions called at lua script execution just incase reloadlua is called mid-round
-doRoundStartFunctions()
+doRoundStartFunctions(true)

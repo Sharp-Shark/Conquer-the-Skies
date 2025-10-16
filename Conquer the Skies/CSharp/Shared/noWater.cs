@@ -11,12 +11,16 @@ using Barotrauma.Extensions;
 using Barotrauma.Items.Components;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using System.ComponentModel;
+using System.Reflection.PortableExecutable;
 
 namespace NoWater
 {
     class NoWaterMod : IAssemblyPlugin
     {
         public Harmony harmony;
+
+        public static List<Submarine> submarines = new List<Submarine>();
 
         public void Initialize()
         {
@@ -74,6 +78,11 @@ namespace NoWater
             harmony.Patch(
             original: typeof(Barotrauma.Items.Components.Steering).GetMethod("Update"),
             postfix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideSteeringUpdate"))
+            );
+            // fleet vs fleet
+            harmony.Patch(
+            original: typeof(Barotrauma.GameSession).GetMethod("StartRound", new Type[] { typeof(LevelData), typeof(bool), typeof(SubmarineInfo), typeof(SubmarineInfo)}),
+            postfix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideStartRound"))
             );
         }
 
@@ -802,52 +811,92 @@ namespace NoWater
             velY *= -1; // only change compared to vanilla
             __instance.item.SendSignal(new Signal(velY.ToString(CultureInfo.InvariantCulture), 0, __instance.user), "velocity_y_out");
         }
+        // fleet vs fleet
+        public static void OverrideStartRound(Barotrauma.GameSession __instance, LevelData? levelData, bool mirrorLevel = false, SubmarineInfo? startOutpost = null, SubmarineInfo? endOutpost = null)
+
+        {
+            if (Barotrauma.GameMain.IsSingleplayer) { return; }
+
+            Barotrauma.Networking.ServerSettings serverSettings;
+#if SERVER
+            serverSettings = Barotrauma.GameMain.Server.ServerSettings;
+#else
+            serverSettings = Barotrauma.GameMain.Client.ServerSettings;
+#endif
+
+            int team1Count = 0;
+            int team2Count = 0;
+            foreach (Barotrauma.Networking.Client client in Barotrauma.Networking.Client.ClientList)
+            {
+                if (client.TeamID == CharacterTeamType.Team1)
+                {
+                    team1Count++;
+                }
+                else if (client.TeamID == CharacterTeamType.Team2)
+                {
+                    team2Count++;
+                }
+            }
+
+            if (serverSettings.BotSpawnMode == Barotrauma.Networking.BotSpawnMode.Normal)
+            {
+                team1Count += serverSettings.BotCount;
+                team2Count += serverSettings.BotCount;
+            }
+            else if (serverSettings.BotSpawnMode == Barotrauma.Networking.BotSpawnMode.Fill)
+            {
+                team1Count = MathHelper.Max(team1Count, serverSettings.BotCount);
+                team2Count = MathHelper.Max(team2Count, serverSettings.BotCount);
+            }
+
+            Submarine team1Anchor = Submarine.MainSubs[0];
+            SubmarineInfo team1SubmarineInfo = team1Anchor.Info;
+            int team1SubmarineCount = (int)Math.Max(0, MathF.Ceiling((float)team1Count / (float)Math.Max(1, team1SubmarineInfo.RecommendedCrewSizeMax)) - 1);
+
+            Submarine team2Anchor = Submarine.MainSubs[0];
+            SubmarineInfo team2SubmarineInfo = null;
+            int team2SubmarineCount = 0;
+            if (Submarine.MainSubs[1] != null)
+            {
+                team2Anchor = Submarine.MainSubs[1];
+                team2SubmarineInfo = team2Anchor.Info;
+                team2SubmarineCount = (int)Math.Max(0, MathF.Ceiling((float)team2Count / (float)Math.Max(1, team2SubmarineInfo.RecommendedCrewSizeMax)) - 1);
+            }
+            if (serverSettings.GameModeIdentifier != "pvp")
+            {
+                team2SubmarineCount = 0;
+            }
+
+            submarines.Clear();
+            for (int i = 0; i < team1SubmarineCount; i++)
+            {
+                Submarine submarine = new Submarine(team1SubmarineInfo);
+                submarine.TeamID = CharacterTeamType.Team1;
+                submarines.Add(submarine);
+                MoveSubmarineToOther(submarine, team1Anchor);
+                team1Anchor = submarine;
+            }
+            for (int i = 0; i < team2SubmarineCount; i++)
+            {
+                Submarine submarine = new Submarine(team2SubmarineInfo);
+                submarine.TeamID = CharacterTeamType.Team2;
+                submarine.FlipX();
+                submarines.Add(submarine);
+                MoveSubmarineToOther(submarine, team2Anchor);
+                team2Anchor = submarine;
+            }
+        }
+        public static void MoveSubmarineToOther (Submarine submarine, Submarine anchor)
+        {
+            Vector2 vector = new Vector2(anchor.FlippedX ? -0.5f : 0.5f, -1f);
+            float radius = Math.Max(Math.Abs(vector.X), Math.Abs(vector.Y));
+            Vector2 dir = new Vector2(vector.X / radius, vector.Y / radius);
+
+            Vector2 offset = new Vector2(submarine.SubBody.Borders.Width + anchor.SubBody.Borders.Width, submarine.SubBody.Borders.Height + anchor.SubBody.Borders.Height) / 2f * dir;
+            Vector2 padding = new Vector2(Math.Sign(offset.X), Math.Sign(offset.Y)) * 500f;
+            submarine.SetPosition(anchor.WorldPosition + offset + padding);
+            submarine.EnableMaintainPosition();
+            submarine.NeutralizeBallast();
+        }
     }
 }
-
-/*
-public static Submarine SpawnSub(SubmarineInfo submarineInfo, Vector2 spawnPosition, bool flipX = false)
-{
-    Submarine spawnedSub = Submarine.Load(submarineInfo, false);
-    spawnedSub.SetPosition(spawnPosition);
-    if (flipX)
-    {
-        spawnedSub.FlipX();
-    }
-    return spawnedSub;
-}
-
-ON THE LUA SIDE OF THINGS
-
--- Spawn submarines
-local spawnSubNotNetworked = NoWaterClass.Type.SpawnSub;
-CTS.spawnSub = function (submarineInfo, spawnPosition, flipX)
-    if CLIENT and Game.IsMultiplayer then return end
-    if submarineInfo == nil then return end
-    local submarineName = submarineInfo.Name
-    Timer.Wait(function ()
-        submarine = spawnSubNotNetworked(submarineInfo, spawnPosition, flipX)
-        submarine.LockX = false
-        submarine.LockY = false
-    end, 1000 * 10)
-    if SERVER then
-        local message = Networking.Start("spawnsub")
-        message.WriteString(filePath)
-        message.WriteSingle(spawnPosition.X)
-        message.WriteSingle(spawnPosition.Y)
-        message.WriteBoolean(flipX or false)
-        Networking.Send(message)
-    end
-end
-if CLIENT then
-    Networking.Receive("spawnsub", function (message, client)
-        local filePath = message.ReadString()
-        local spawnPosition = Vector2()
-        spawnPosition.X = message.ReadSingle()
-        spawnPosition.Y = message.ReadSingle()
-        flipX = message.ReadBoolean()
-        submarineInfo = SubmarineInfo(filePath)
-        spawnSubNotNetworked(submarineInfo, spawnPosition, flipX)
-    end)
-end
-*/

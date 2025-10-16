@@ -109,3 +109,60 @@ CTS.tablePrint = function (t, output, long, depth, chars, history)
 	if not output then print(out) end
 	return out
 end
+
+-- Find waypoints by job
+CTS.findWaypointsByJob = function (submarine, job)
+	local waypoints = {}
+	for waypoint in submarine.GetWaypoints(false) do
+		if (waypoint.AssignedJob ~= nil) and (waypoint.AssignedJob.Identifier == job) then
+			table.insert(waypoints, waypoint)
+		end
+	end
+	if (job == '') and (#waypoints < 1) then
+		for waypoint in submarine.GetWaypoints(false) do
+			if waypoint.SpawnType == SpawnType.Human then
+				table.insert(waypoints, waypoint)
+			end
+		end
+		
+	end
+	return waypoints
+end
+
+-- Find one random waypoint of a job
+CTS.findRandomWaypointByJob = function (submarine, job)
+	local waypoints = CTS.findWaypointsByJob(submarine, job)
+	return waypoints[math.random(#waypoints)]
+end
+
+-- Flip submarine X
+CTS.flipSubmarine = function (submarine, flipCharacters)
+    submarine.FlipX()
+    if flipCharacters then
+        for character in Character.CharacterList do
+            if character.Submarine == submarine then
+                local offsetX = character.WorldPosition.X - submarine.WorldPosition.X
+                character.TeleportTo(Vector2(submarine.WorldPosition.X - offsetX, character.WorldPosition.Y))
+            end
+        end
+    end
+    if SERVER then
+        local message = Networking.Start("syncsubflippedx")
+        message.WriteUInt16(submarine.ID)
+        message.WriteBoolean(submarine.FlippedX)
+        Networking.Send(message)
+    end
+end
+
+-- used for posing NPCs
+CTS.freezeCharacter = function (character, bool)
+	local value = 0
+	if bool then value = 2 end
+	
+	character.AnimController.Collider.BodyType = value
+	for limb in character.AnimController.Limbs do
+		limb.body.BodyType = value
+	end
+	
+	print(character, ' state: ', value)
+end
