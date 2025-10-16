@@ -24,6 +24,11 @@ CTS.roundStartFunctions.main = function (luaReloaded)
 		-- automations for sub editor
 		if CLIENT and Game.IsSingleplayer and Game.IsSubEditor then
 			local identifierResetSet = {
+				aerialchargeshell = true,
+				mortarshell = true,
+				divingknife = true,
+				boardingaxe = true,
+				abyssdivingsuit = true,
 				slipsuit = true,
 				cargoscooter = true,
 				underwaterscooter = true,
