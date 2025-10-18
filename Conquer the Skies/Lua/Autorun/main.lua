@@ -43,58 +43,6 @@ CTS.roundStartFunctions.main = function (luaReloaded)
 			end
 		end
 	end
-
-	-- do not spread spread crew if this method was caused due to lua being reloaded
-	if luaReloaded then return end
-
-	local teamData = {
-		[1] = {
-			crew = {},
-			submarines = {Submarine.MainSubs[1]},
-			crewPerSub = 0,
-			anchor = Submarine.MainSubs[1],
-		},
-		[2] = {
-			crew = {},
-			submarines = {Submarine.MainSubs[2]},
-			crewPerSub = 0,
-			anchor = Submarine.MainSubs[2],
-		},
-	}
-
-    for character in Character.CharacterList do
-		if teamData[character.TeamID] ~= nil then
-			table.insert(teamData[character.TeamID].crew, character)
-		end
-	end
-
-	local submarines = CTS.NoWaterClass.Type.submarines
-	for submarine in submarines do
-		if teamData[submarine.TeamID] ~= nil then
-			table.insert(teamData[submarine.TeamID].submarines, submarine)
-		end
-	end
-
-	teamData[1].crewPerSub = math.ceil(#teamData[1].crew / math.max(1, #teamData[1].submarines))
-	teamData[2].crewPerSub = math.ceil(#teamData[2].crew / math.max(1, #teamData[2].submarines))
-
-	for team, data in pairs(teamData) do
-        local submarineIndex = 1
-		local submarineCrewCount = 0
-		for character in data.crew do
-			local submarine = data.submarines[submarineIndex]
-
-			local waypoint = CTS.findRandomWaypointByJob(submarine, character.JobIdentifier)
-			if waypoint == nil then waypoint = CTS.findRandomWaypointByJob(submarine, '') end
-			character.TeleportTo(waypoint.WorldPosition)
-
-			submarineCrewCount = submarineCrewCount + 1
-			if submarineCrewCount >= data.crewPerSub then
-				submarineIndex = math.min(#data.submarines, submarineIndex + 1)
-				submarineCrewCount = 0
-			end
-		end
-    end
 end
 
 -- Think functions
