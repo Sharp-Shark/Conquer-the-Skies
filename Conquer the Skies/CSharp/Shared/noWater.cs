@@ -49,10 +49,12 @@ namespace NoWater
             original: typeof(Item).GetMethod("OnCollision", AccessTools.all),
             postfix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideItemOnCollision"))
             );
+            /* was causing issues so has been disabled for now
             harmony.Patch(
             original: typeof(Item).GetMethod("FindHull", AccessTools.all),
             postfix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideItemFindHull"))
             );
+            */
             // gives grappling hook functionality to harpoons
             harmony.Patch(
             original: typeof(Barotrauma.Items.Components.Rope).GetMethod("Update", AccessTools.all),
