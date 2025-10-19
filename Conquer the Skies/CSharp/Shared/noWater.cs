@@ -11,16 +11,12 @@ using Barotrauma.Extensions;
 using Barotrauma.Items.Components;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
-using System.ComponentModel;
-using System.Reflection.PortableExecutable;
 
 namespace NoWater
 {
     class NoWaterMod : IAssemblyPlugin
     {
         public Harmony harmony;
-
-        public static List<Submarine> submarines = new List<Submarine>();
 
         public void Initialize()
         {
@@ -42,19 +38,27 @@ namespace NoWater
             original: typeof(Ragdoll).GetMethod("OnLimbCollision"),
             prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideLimbCollision"))
             );
-            // new patches
+            /* New Patches, not from the No Water Mod */
+            // makes items not behave underwater when outside
             harmony.Patch(
             original: typeof(Item).GetMethod("IsInWater", AccessTools.all),
             prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideItemIsInWater"))
             );
+            // fixes items colliding with hulls
             harmony.Patch(
             original: typeof(Item).GetMethod("OnCollision", AccessTools.all),
             postfix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideItemOnCollision"))
             );
             harmony.Patch(
+            original: typeof(Item).GetMethod("FindHull", AccessTools.all),
+            postfix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideItemFindHull"))
+            );
+            // gives grappling hook functionality to harpoons
+            harmony.Patch(
             original: typeof(Barotrauma.Items.Components.Rope).GetMethod("Update", AccessTools.all),
             prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideRopeUpdate"))
             );
+            // slipsuit has a jetpack
             harmony.Patch(
             original: typeof(Barotrauma.Items.Components.Wearable).GetMethod("Update", AccessTools.all),
             prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideWearableUpdateSlipsuit"))
@@ -63,14 +67,17 @@ namespace NoWater
             original: typeof(Barotrauma.Items.Components.Propulsion).GetMethod("Use", AccessTools.all),
             prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverridePropulsionUseSlipsuit"))
             );
+            // ungrounds when propelling upwards
             harmony.Patch(
             original: typeof(Barotrauma.Items.Components.Propulsion).GetMethod("Use", AccessTools.all),
             prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverridePropulsionUse"))
             );
+            // uncapped fall damage
             harmony.Patch(
             original: typeof(Ragdoll).GetMethod("GetImpactDamage", AccessTools.all),
             postfix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideGetImpactDamage"))
             );
+            // submarines sink instead of floating when they have no water
             harmony.Patch(
             original: typeof(SubmarineBody).GetMethod("CalculateBuoyancy", AccessTools.all),
             postfix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideCalculateBuoyancy"))
@@ -92,11 +99,11 @@ namespace NoWater
 
         public static bool OverrideRagdoll(float deltaTime, Camera cam, Ragdoll __instance)
         {
-            // if true, creature can swim in the air when outside a submarine
             if (__instance.currentHull != null)
             {
                 __instance.RefreshFloorY(deltaTime, ignoreStairs: __instance.Stairs == null);
             }
+            // if true, creature can swim in the air when outside a submarine
             bool swimInAir = __instance.character.SpeciesName != "human".ToIdentifier() && (__instance.currentHull == null || !__instance.character.IsHumanoid && (__instance.character.NeedsWater || !__instance.onGround || (Math.Abs(__instance.targetMovement.Y) > 0))) && !__instance.character.IsDead;
 
             if (!__instance.character.Enabled || __instance.character.Removed || __instance.Frozen || __instance.Invalid || __instance.Collider == null || __instance.Collider.Removed) { return false; }
@@ -566,6 +573,7 @@ namespace NoWater
                 //water flowing from the righthand room to the lefthand outsidedies
                 if (__instance.rect.X > hull1.Rect.X + hull1.Rect.Width / 2.0f)
                 {
+                    if (hull1.WaveY.Length == 0) { return false; }
                     if (Math.Max(hull1.Surface + hull1.WaveY[hull1.WaveY.Length - 1], 0f) > __instance.rect.Y - __instance.Size)
                     {
                         __instance.lowerSurface = hull1.Surface - hull1.WaveY[hull1.WaveY.Length - 1];
@@ -582,6 +590,7 @@ namespace NoWater
                 }
                 else
                 {
+                    if (hull1.WaveY.Length == 0) { return false; }
                     if (Math.Max(hull1.Surface + hull1.WaveY[0], 0f) > __instance.rect.Y - __instance.Size)
                     {
                         __instance.lowerSurface = hull1.Surface - hull1.WaveY[0];
@@ -612,6 +621,8 @@ namespace NoWater
                 //bottom gap there's water in the room, drop to outside
                 else if (hull1.WaterVolume > 0)
                 {
+                    // guard clause
+                    if (hull1.WaveVel.Length == 0) { return false; }
 
                     //make sure the amount of water moved isn't more than what the room contains
                     float delta = Math.Min(hull1.WaterVolume, 300.0f * sizeModifier * deltaTime);
@@ -622,8 +633,8 @@ namespace NoWater
                     int n = hull1.GetWaveIndex(__instance.rect.X + (__instance.rect.Width * 0.5f));
                     //syphon effect?
                     float vel = __instance.flowForce.Y * deltaTime * 0.1f;
-                    hull1.WaveVel[n] += vel;
-                    hull1.WaveVel[n + 1] += vel;
+                    if (n < hull1.WaveVel.Length) { hull1.WaveVel[n] += vel; }
+                    if (n + 1 < hull1.WaveVel.Length) { hull1.WaveVel[n + 1] += vel; }
                 }
             }
             if (hull1.WaterVolume < 5f)
@@ -672,6 +683,26 @@ namespace NoWater
                 }
             }
         }
+        public static void OverrideItemFindHull(Item __instance, ref Hull __result)
+        {
+            if (__result != null) { return; }
+            if (__instance.body == null || !__instance.body.Enabled || __instance.body.BodyType != BodyType.Dynamic) { return; }
+            if (__instance.body.LinearVelocity.Y > 0) { return; }
+
+            float height = MathHelper.Max(__instance.body.Height, __instance.body.Radius) * 100 + 4;
+            Hull newHull = Hull.FindHull(__instance.WorldPosition + new Vector2(0, -height), null, true, true);
+
+            if (newHull != null)
+            {
+                if (newHull.Submarine != null)
+                {
+                    __instance.Submarine = newHull.Submarine;
+                    __instance.body.Submarine = newHull.Submarine;
+                }
+                __instance.CurrentHull = newHull;
+                __result = newHull;
+            }
+        }
         public static void OverrideRopeUpdate(Barotrauma.Items.Components.Rope __instance, float deltaTime, Camera cam)
         {
             Barotrauma.Items.Components.Projectile projectile = __instance.item.GetComponent<Barotrauma.Items.Components.Projectile>();
@@ -687,7 +718,7 @@ namespace NoWater
             if (__instance.Snapped || !__instance.target.HasTag("harpoonammo") || user == null || user.Removed || user.AnimController.IsClimbing) { return; }
 
             Vector2 diff = __instance.target.WorldPosition - __instance.GetSourcePos();
-            Vector2 vector = Vector2.Normalize(diff) * Math.Min(0.5f, diff.Length() / 1000f);
+            Vector2 vector = Vector2.Normalize(diff) * Math.Min(1f, diff.Length() / 800f);
             Vector2 move = Vector2.Normalize(user.AnimController.TargetMovement) / 16f;
 
             // holding crouch disables pull
@@ -700,12 +731,12 @@ namespace NoWater
                 user.AnimController.onGround = false;
             }
 
-            user.AnimController.Collider.LinearVelocity *= 0.98f;
+            user.AnimController.Collider.LinearVelocity *= 0.95f;
             user.AnimController.Collider.LinearVelocity += vector;
             user.AnimController.Collider.LinearVelocity += move;
             foreach (Limb limb in user.AnimController.Limbs)
             {
-                limb.body.LinearVelocity *= 0.98f;
+                limb.body.LinearVelocity *= 0.95f;
                 limb.body.LinearVelocity += vector;
                 limb.body.LinearVelocity += move;
             }

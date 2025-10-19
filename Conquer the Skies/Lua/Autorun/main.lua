@@ -34,6 +34,9 @@ CTS.roundStartFunctions.main = function (luaReloaded)
 				underwaterscooter = true,
 				extinguisher = true,
 				machinepistol = true,
+				spear = true,
+				alienspear = true,
+				spearunique = true,
 			}
 			for item in Item.ItemList do
 				-- reset item

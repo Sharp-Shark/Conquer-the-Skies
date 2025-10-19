@@ -1,6 +1,5 @@
 Ahead is a list of all the people whose work contributed to this mod.
 Base C# taken from No Water mod by DrBruhman.
-Base for "fleet.lua" taken from TraitorMod by Evil Factory.
 Thanks to Evil Factory, Ydrec and the Luatrauma discord for helping me overcome a lot of the hurdles I came across.
 Mod inspired by Airships: Conquer the Skies.
 Everything else by Sharp-Shark.

@@ -28,7 +28,7 @@ namespace NoWater
 			original: typeof(CharacterHealth).GetMethod("UpdateStatusHUD"),
 			prefix: new HarmonyMethod(typeof(NoWaterModCS).GetMethod("OverrideUpdateStatusHUD"))
 			);
-            // new patches
+            /* New Patches, not from the No Water Mod */
 			harmony.Patch(
 			original: typeof(Particle).GetMethod("Draw"),
 			prefix: new HarmonyMethod(typeof(NoWaterModCS).GetMethod("OverrideParticleDraw"))
