@@ -748,6 +748,7 @@ namespace NoWater
         {
             if (__instance.item.Prefab.Identifier != "slipsuit".ToIdentifier()) { return; }
             Character character = __instance.picker;
+            //LuaCsLogger.LogMessage("testdingus " + character.Name.ToString());
             __instance.item.Use(deltaTime, character);
         }
         public static bool OverridePropulsionUseSlipsuit(Barotrauma.Items.Components.Propulsion __instance, float deltaTime, Character character, ref bool __result)
