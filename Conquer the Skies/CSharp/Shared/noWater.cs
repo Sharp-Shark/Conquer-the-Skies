@@ -750,7 +750,7 @@ namespace NoWater
             if (__instance.Snapped || !__instance.target.HasTag("harpoonammo") || user == null || user.Removed || user.AnimController.IsClimbing) { return; }
 
             Vector2 diff = __instance.target.WorldPosition - __instance.GetSourcePos();
-            Vector2 vector = Vector2.Normalize(diff) * Math.Min(1f, diff.Length() / 800f);
+            Vector2 vector = Vector2.Normalize(diff) * Math.Min(0.8f, diff.Length() / 200f);
             Vector2 move = Vector2.Normalize(user.AnimController.TargetMovement) / 16f;
 
             // holding crouch disables pull

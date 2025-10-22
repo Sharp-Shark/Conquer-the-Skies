@@ -108,8 +108,8 @@
         <Conditional InWater="false" />
       </StatusEffect>
     </Holdable>
-    <!-- launchimpulse is -60 instead of 0 -->
-    <Projectile characterusable="false" launchimpulse="-60" maxtargetstohit="20" damagedoors="true">
+    <!-- launchimpulse is -56 instead of 0 -->
+    <Projectile characterusable="false" launchimpulse="-56" maxtargetstohit="20" damagedoors="true">
       <Attack structuredamage="75" itemdamage="50" severlimbsprobability="2.5" penetration="0.5" targetforce="350">
         <Affliction identifier="explosiondamage" strength="100" />
         <Affliction identifier="bleeding" strength="10" />
