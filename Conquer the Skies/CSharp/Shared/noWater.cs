@@ -9,6 +9,7 @@ using FarseerPhysics.Dynamics.Contacts;
 using Barotrauma;
 using Barotrauma.Extensions;
 using Barotrauma.Items.Components;
+using Barotrauma.Networking;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 
@@ -17,6 +18,8 @@ namespace NoWater
     class NoWaterMod : IAssemblyPlugin
     {
         public Harmony harmony;
+
+        public static string MESSAGE_JETSUIT_PARTICLE = "cts_jetsuit_particle";
 
         public void Initialize()
         {
@@ -88,6 +91,33 @@ namespace NoWater
             original: typeof(Barotrauma.Items.Components.Steering).GetMethod("Update"),
             postfix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideSteeringUpdate"))
             );
+
+#if CLIENT
+            GameMain.LuaCs.Networking.Receive(MESSAGE_JETSUIT_PARTICLE, (object[] args) =>
+            {
+                IReadMessage msg = (IReadMessage)args[0];
+                int characterID = msg.ReadUInt16();
+                int itemID = msg.ReadUInt16();
+                if (Barotrauma.Character.Controlled != null && Barotrauma.Character.Controlled.ID == characterID)
+                {
+                    return;
+                }
+                foreach (Item item in Item.ItemList)
+                {
+                    if (item.ID == itemID)
+                    {
+                        Barotrauma.Items.Components.Propulsion component = item.GetComponent<Barotrauma.Items.Components.Propulsion>();
+                        if (component == null) { return; };
+                        if (!string.IsNullOrWhiteSpace(component.particles))
+                        {
+                            GameMain.ParticleManager.CreateParticle(component.particles, item.WorldPosition,
+                                item.body.Rotation + ((item.body.Dir > 0.0f) ? 0.0f : MathHelper.Pi), 0.0f, item.CurrentHull);
+                        }
+                        return;
+                    }
+                }
+            });
+#endif
         }
 
         public void OnLoadCompleted() { }
@@ -748,7 +778,6 @@ namespace NoWater
         {
             if (__instance.item.Prefab.Identifier != "slipsuit".ToIdentifier()) { return; }
             Character character = __instance.picker;
-            //LuaCsLogger.LogMessage("testdingus " + character.Name.ToString());
             __instance.item.Use(deltaTime, character);
         }
         public static bool OverridePropulsionUseSlipsuit(Barotrauma.Items.Components.Propulsion __instance, float deltaTime, Character character, ref bool __result)
@@ -790,15 +819,34 @@ namespace NoWater
                     __instance.item.body.Rotation + ((__instance.item.body.Dir > 0.0f) ? 0.0f : MathHelper.Pi), 0.0f, __instance.item.CurrentHull);
             }
 #endif
+#if SERVER
+            foreach (Barotrauma.Networking.Client client in Barotrauma.Networking.Client.ClientList)
+            {
+                IWriteMessage message = GameMain.LuaCs.Networking.Start(MESSAGE_JETSUIT_PARTICLE);
+                message.WriteUInt16(character.ID);
+                message.WriteUInt16(__instance.item.ID);
+                GameMain.LuaCs.Networking.Send(message, client.Connection);
+            }
+#endif
+
             __result = true;
             return false;
         }
         public static void OverridePropulsionUse(Barotrauma.Items.Components.Propulsion __instance, float deltaTime, Character character)
         {
             if (!__instance.IsActive) { return; }
-            if (__instance.item.Prefab.Identifier == "slipsuit".ToIdentifier()) { return; }
 
             Vector2 dir = character.CursorPosition - character.Position;
+            if (dir.X > 0 && character.AnimController.TargetDir != Barotrauma.Direction.Right)
+            {
+                character.AnimController.TargetDir = Barotrauma.Direction.Right;
+                
+            } else if (dir.X < 0 && character.AnimController.TargetDir != Barotrauma.Direction.Left)
+            {
+                character.AnimController.TargetDir = Barotrauma.Direction.Left;
+            }
+
+            if (__instance.item.Prefab.Identifier == "slipsuit".ToIdentifier()) { return; }
 
             if (dir.Y * __instance.Force <= 0 || character.IsKeyDown(InputType.Crouch)) { return; }
 
