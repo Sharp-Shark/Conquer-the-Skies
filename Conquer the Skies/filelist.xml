@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<contentpackage name="Conquer the Skies" modversion="1.0.6" corepackage="False" steamworkshopid="3589292349" gameversion="1.10.7.2">
+<contentpackage name="Conquer the Skies" modversion="1.0.7" corepackage="False" steamworkshopid="3589292349" gameversion="1.10.7.2">
   <BackgroundCreaturePrefabs file="%ModDir%/Biomes/BackgroundCreaturePrefabs.xml" />
   <LevelGenerationParameters file="%ModDir%/Biomes/Biomes.xml" />
   <LevelGenerationParameters file="%ModDir%/Biomes/Open Skies/OpenSkies.xml" />
@@ -16,7 +16,9 @@
   <Submarine file="%ModDir%/Submarines/HMS Canoa.sub" />
   <Submarine file="%ModDir%/Submarines/HMS Rammack.sub" />
   <Submarine file="%ModDir%/Submarines/HMS Atto.sub" />
-  <Submarine file="%ModDir%/Submarines/Biplane.sub" />
-  <Submarine file="%ModDir%/Submarines/HMS Longhaul.sub" />
   <Submarine file="%ModDir%/Submarines/HMS Brick.sub" />
+  <Submarine file="%ModDir%/Submarines/Biplane.sub" />
+  <Submarine file="%ModDir%/Submarines/Hussar.sub" />
+  <Submarine file="%ModDir%/Submarines/HMS Longhaul.sub" />
+  <Submarine file="%ModDir%/Submarines/HMS Carriage.sub" />
 </contentpackage>

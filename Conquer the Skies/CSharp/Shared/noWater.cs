@@ -52,12 +52,10 @@ namespace NoWater
             original: typeof(Item).GetMethod("OnCollision", AccessTools.all),
             postfix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideItemOnCollision"))
             );
-            /* was causing issues so has been disabled for now
             harmony.Patch(
             original: typeof(Item).GetMethod("FindHull", AccessTools.all),
             postfix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideItemFindHull"))
             );
-            */
             // gives grappling hook functionality to harpoons
             harmony.Patch(
             original: typeof(Barotrauma.Items.Components.Rope).GetMethod("Update", AccessTools.all),
@@ -91,6 +89,12 @@ namespace NoWater
             original: typeof(Barotrauma.Items.Components.Steering).GetMethod("Update"),
             postfix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideSteeringUpdate"))
             );
+            // docking ports with the nohull tag will not attempt to create a hull
+            harmony.Patch(
+            original: typeof(Barotrauma.Items.Components.DockingPort).GetMethod("CreateHulls", AccessTools.all),
+            prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideCreateHulls"))
+            );
+
 
 #if CLIENT
             GameMain.LuaCs.Networking.Receive(MESSAGE_JETSUIT_PARTICLE, (object[] args) =>
@@ -720,6 +724,7 @@ namespace NoWater
             if (__result != null) { return; }
             if (__instance.body == null || !__instance.body.Enabled || __instance.body.BodyType != BodyType.Dynamic) { return; }
             if (__instance.body.LinearVelocity.Y > 0) { return; }
+            if (__instance.GetComponent<Barotrauma.Items.Components.Projectile>() != null) { return; }
 
             float height = MathHelper.Max(__instance.body.Height, __instance.body.Radius) * 100 + 4;
             Hull newHull = Hull.FindHull(__instance.WorldPosition + new Vector2(0, -height), null, true, true);
@@ -887,6 +892,11 @@ namespace NoWater
             float velY = MathHelper.Lerp((__instance.neutralBallastLevel * 100f - 50f) * 2f, -100 * Math.Sign(__instance.targetVelocity.Y), Math.Abs(__instance.targetVelocity.Y) / 100f);
             velY *= -1; // only change compared to vanilla
             __instance.item.SendSignal(new Signal(velY.ToString(CultureInfo.InvariantCulture), 0, __instance.user), "velocity_y_out");
+        }
+        public static bool OverrideCreateHulls(Barotrauma.Items.Components.DockingPort __instance)
+        {
+            if (__instance.DockingTarget == null) { return false; }
+            return !__instance.item.HasTag("nohull") && !__instance.DockingTarget.item.HasTag("nohull");
         }
     }
 }
