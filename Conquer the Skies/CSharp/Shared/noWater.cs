@@ -94,6 +94,23 @@ namespace NoWater
             original: typeof(Barotrauma.Items.Components.DockingPort).GetMethod("CreateHulls", AccessTools.all),
             prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideCreateHulls"))
             );
+            // disable crush depth
+            harmony.Patch(
+            original: typeof(Barotrauma.Submarine).GetProperty("AtDamageDepth").GetGetMethod(),
+            prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideAtDamageDepth"))
+            );
+            harmony.Patch(
+            original: typeof(Barotrauma.Submarine).GetProperty("AtCosmeticDamageDepth").GetGetMethod(),
+            prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideAtCosmeticDamageDepth"))
+            );
+            harmony.Patch(
+            original: typeof(Barotrauma.SubmarineBody).GetMethod("UpdateDepthDamage", AccessTools.all),
+            prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideUpdateDepthDamage"))
+            );
+            harmony.Patch(
+            original: typeof(Barotrauma.Character).GetProperty("IsProtectedFromPressure").GetGetMethod(),
+            prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideIsProtectedFromPressure"))
+            );
 
 
 #if CLIENT
@@ -207,10 +224,12 @@ namespace NoWater
                 __instance.inWater = false;
                 __instance.headInWater = false;
                 __instance.RefreshFloorY(deltaTime, false);
+                /* disabled
                 if (__instance.TargetMovement.X == 0f)
                 {
                     __instance.ForceRefreshFloorY();
                 }
+                */
             }
             else
             {
@@ -755,7 +774,7 @@ namespace NoWater
             if (__instance.Snapped || !__instance.target.HasTag("harpoonammo") || user == null || user.Removed || user.AnimController.IsClimbing) { return; }
 
             Vector2 diff = __instance.target.WorldPosition - __instance.GetSourcePos();
-            Vector2 vector = Vector2.Normalize(diff) * Math.Min(0.8f, diff.Length() / 200f);
+            Vector2 vector = Vector2.Normalize(diff) * Math.Min(0.7f, diff.Length() / 200f);
             Vector2 move = Vector2.Normalize(user.AnimController.TargetMovement) / 16f;
 
             // holding crouch disables pull
@@ -845,7 +864,7 @@ namespace NoWater
             if (dir.X > 0 && character.AnimController.TargetDir != Barotrauma.Direction.Right)
             {
                 character.AnimController.TargetDir = Barotrauma.Direction.Right;
-                
+
             } else if (dir.X < 0 && character.AnimController.TargetDir != Barotrauma.Direction.Left)
             {
                 character.AnimController.TargetDir = Barotrauma.Direction.Left;
@@ -897,6 +916,25 @@ namespace NoWater
         {
             if (__instance.DockingTarget == null) { return false; }
             return !__instance.item.HasTag("nohull") && !__instance.DockingTarget.item.HasTag("nohull");
+        }
+        public static bool OverrideAtDamageDepth(ref bool __result)
+        {
+            __result = false;
+            return false;
+        }
+        public static bool OverrideAtCosmeticDamageDepth(ref bool __result)
+        {
+            __result = false;
+            return false;
+        }
+        public static bool OverrideUpdateDepthDamage()
+        {
+            return false;
+        }
+        public static bool OverrideIsProtectedFromPressure(ref bool __result)
+        {
+            __result = true;
+            return false;
         }
     }
 }
