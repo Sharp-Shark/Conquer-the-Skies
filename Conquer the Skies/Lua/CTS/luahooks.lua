@@ -20,3 +20,27 @@ Hook.Add("CTS.aerialcharge.onnotcontained", "CTS.aerialcharge.onnotcontained", f
     end
     item.body.ApplyTorque(item.body.AngularVelocity * -0.1)
 end)
+
+--[[ funny float physics
+local float = {}
+CTS.test = function (character, bool)
+    character.AnimController.Collider.FarseerBody.IgnoreGravity = bool
+    for limb in character.AnimController.Limbs do
+        limb.body.FarseerBody.IgnoreGravity = bool
+    end
+    if bool then
+        float[character] = true
+    else
+        float[character] = nil
+    end
+end
+
+CTS.thinkFunctions.float = function ()
+    for character, bool in pairs(float) do
+        character.AnimController.Collider.ApplyForce(Vector2(0, 10))
+        for limb in character.AnimController.Limbs do
+            limb.body.ApplyForce(Vector2(0, 10))
+        end
+    end
+end
+]]--
