@@ -57,3 +57,9 @@ end)
 if SERVER and Game.ServerSettings.IsPublic then
 	discordChatMessage('00| Server is up and running!')
 end
+
+Networking.Receive("cts_pingOutsideHasOxygen", function (message, client)
+	local message = Networking.Start("cts_setOutsideHasOxygen")
+	message.WriteBoolean(CTS.NoWaterClass.Type.OutsideHasAir)
+	Networking.Send(message, client.Connection)
+end)

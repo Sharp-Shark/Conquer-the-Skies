@@ -8,6 +8,12 @@ CTS.path = table.pack(...)[1]
 CTS.NoWaterClass = LuaUserData.RegisterType('NoWater.NoWaterMod')
 
 -- Load utilities/dependencies
+json = dofile(CTS.path .. "/Lua/json.lua")
+json.serialize = json.encode
+json.parse = json.decode
+
+require 'CTS/utilities'
+
 if File.Exists(CTS.path .. '/Lua/CTS/secret.lua') then
 	require 'CTS/secret'
 end
@@ -119,9 +125,13 @@ if CLIENT then
 end
 
 -- Load other files
-require 'CTS/utilities'
 require 'CTS/networking/server'
+require 'CTS/networking/client'
 require 'CTS/luahooks'
+require 'CTS/settings'
+
+-- Saving
+CTS.saving.boot()
 
 -- Execute at round start
 Hook.Add("roundStart", "CTS.prepareRound", function ()

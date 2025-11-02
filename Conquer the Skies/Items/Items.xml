@@ -1,5 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Items>
+  <Item name="Depth Charge Turret" 
+        description=""
+        identifier="depthchargeturret" Tags="turret" category="Machine,Weapon" subcategory="subweapons" interactthroughwalls="true" Scale="0.5" interactdistance="10" spritecolor="1.0,1.0,1.0,1.0" focusonselected="true" offsetonselected="750" linkable="true" allowedlinks="depthchargeequipment,depthchargeammosource">
+    <Sprite texture="%ModDir%/Items/depthchargeturret.png" depth="0.01" sourcerect="84,0,256,256" canflipy="false" />
+    <MinimapIcon name="Command_Weapons_Coilgun" texture="Content/UI/CommandUIAtlas.png" sourcerect="768,0,128,128" />
+    <SwappableItem price="5000" replacementonuninstall="turrethardpoint" origin="128,215" swapidentifier="basicturret">
+      <SchematicSprite texture="Content/UI/WeaponUI.png" sourcerect="256,0,256,389" />
+      <SwapConnectedItem tag="periscope" swapto="periscope" />
+      <SwapConnectedItem tag="turretammosource" swapto="depthchargeammosource" />
+    </SwappableItem>    
+    <UpgradePreviewSprite scale="2.5" texture="Content/UI/WeaponUI.png" sourcerect="7,810,109,65" origin="0.5,0.5" />
+    <StaticBody width="80" radius="80" />
+    <Turret launchimpulse="5.0" canbeselected="false" characterusable="false" linkable="true" barrelpos="126,82" firingoffset="0,-180"  rotationlimits="180,360" powerconsumption="10000.0" showchargeindicator="true" showprojectileindicator="true" recoildistance="100" reload="5" springstiffnesslowskill="2" springstiffnesshighskill="50" springdampinglowskill="0.5" springdampinghighskill="10" rotationspeedlowskill="1" rotationspeedhighskill="8" MaxAngleOffset="10" AICurrentTargetPriorityMultiplier="1.1">
+      <sound file="Content/Items/Weapons/Coilgun1.ogg" range="10000" type="OnUse" />
+      <sound file="Content/Items/Weapons/Coilgun2.ogg" range="10000" type="OnUse" />
+      <sound file="Content/Items/Weapons/Coilgun3.ogg" range="10000" type="OnUse" />
+      <sound file="Content/Items/Weapons/Coilgun4.ogg" range="10000" type="OnUse" />
+      <sound file="Content/Items/Weapons/Coilgun5.ogg" range="10000" type="OnUse" />
+      <sound file="Content/Items/Weapons/Coilgun6.ogg" range="10000" type="OnUse" />
+      <WeaponIndicator texture="Content/UI/WeaponUI.png" sourcerect="425,913,66,36" origin="0.24, 0.472" />
+      <RailSprite texture="%ModDir%/Items/depthchargeturret.png" depth="0.011" sourcerect="0,0,84,206" origin="0.52, 0.737" />
+      <BarrelSprite texture="Content/Items/Weapons/TurretsAndDepthCharges.png" depth="0.012" sourcerect="259,1,85,149" origin="0.52, 1.385" />
+      <Crosshair texture="Content/Items/Weapons/Crosshairs.png" sourcerect="256,0,256,256" />
+      <CrosshairPointer texture="Content/Items/Weapons/Crosshairs.png" sourcerect="0,0,256,256" />
+      <MoveSound file="Content/Items/Weapons/RailgunLoop.ogg" />
+      <StartMoveSound file="Content/Items/Weapons/RailgunStart.ogg" />
+      <EndMoveSound file="Content/Items/Weapons/RailgunStop.ogg" />
+      <RequiredSkill identifier="weapons" level="50" />
+      <LightComponent LightColor="1.0,0.8,0.8,1.0" Flicker="0.0" range="2500" directional="true" IsOn="true" drawbehindsubs="true" ignorecontinuoustoggle="true" InheritParentIsActive="false">
+        <LightTexture texture="Content/Lights/lightcone.png" origin="0.0,0.5" size="1.0,1.0" />
+      </LightComponent>
+      <ParticleEmitter particle="muzzleflashcoilgun" particleamount="1" velocitymin="50" velocitymax="100" />
+      <StatusEffect type="OnUse" target="This">
+        <Explosion range="1000.0" structuredamage="0" force="0.01" camerashake="5.0" flames="false" smoke="false" sparks="false" underwaterbubble="false" />
+      </StatusEffect>
+    </Turret>
+    <aitarget maxsightrange="3000" maxsoundrange="8000" fadeouttime="5" />
+    <ConnectionPanel selectkey="Action" canbeselected="true" msg="ItemMsgRewireScrewdriver" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.32" minsize="400,350" maxsize="480,420" anchor="Center" style="ConnectionPanel" />
+      <RequiredItem items="screwdriver" type="Equipped" />
+      <input name="power_in" displayname="connection.powerin" />
+      <input name="position_in" displayname="connection.turretaimingin" />
+      <input name="trigger_in" displayname="connection.turrettriggerin" />
+      <input name="toggle_light" displayname="connection.togglelight"/>
+      <input name="set_light" displayname="connection.setlight" />
+      <input name="set_auto_operate" displayname="connection.setautooperate" />
+      <input name="toggle_auto_operate" displayname="connection.toggleautooperate" />
+    </ConnectionPanel>
+    <SkillRequirementHint identifier="weapons" level="50" />
+  </Item>
+  <!-- Torpedo Charges move horizontally -->
+  <Item name="Torpedo Charge Shell" identifier="torpedochargeshell" tags="depthchargeammo,demolitionsexpert" category="Weapon" sonarsize="5" scale="0.42" impactsoundtag="impact_metal_heavy" damagedbymonsters="true" damagedbyexplosions="true" damagedbyrepairtools="true" damagedbyprojectiles="true" damagedbymeleeweapons="true" indestructible="true" health="10" cargocontaineridentifier="">
+    <Upgrade gameversion="0.20.4.0" scale="0.4"/>
+    <PreferredContainer primary="depthchargeloader" secondary="ammoboxcontainer" />
+    <Price baseprice="120" minavailable="1">
+      <Price storeidentifier="merchantoutpost" multiplier="1.4" />
+      <Price storeidentifier="merchantcity" multiplier="1.25" minavailable="2" />
+      <Price storeidentifier="merchantresearch" multiplier="1.25" />
+      <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="4" />
+      <Price storeidentifier="merchantmine" multiplier="1.25" />
+    </Price>
+    <Deconstruct time="10">
+      <Item identifier="iron" />
+      <Item identifier="uex" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="20">
+      <RequiredSkill identifier="weapons" level="25" />
+      <RequiredItem identifier="iron" amount="2" />
+      <RequiredItem identifier="uex" />
+    </Fabricate>
+    <InventoryIcon texture="%ModDir%/Items/torpedocharge.png" sourcerect="130,0,64,64" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Items/torpedocharge.png" sourcerect="0,0,130,89" depth="0.55" origin="0.5,0.5" />
+    <Body width="56" height="42" radius="34" density="20" />
+    <Holdable slots="RightHand+LeftHand" holdpos="0,-50" handle1="-10,20" handle2="10,20" aimable="false" msg="ItemMsgPickUpSelect" />
+    <Projectile characterusable="false" launchimpulse="8.0">
+      <StatusEffect type="OnSpawn" target="This">
+        <LuaHook name="CTS.aerialcharge.onspawn" />
+      </StatusEffect>
+      <StatusEffect type="OnNotContained" target="This">
+        <LuaHook name="CTS.torpedocharge.onnotcontained" />
+      </StatusEffect>
+      <!-- Particles when active -->
+      <StatusEffect type="OnActive" target="This">
+        <ParticleEmitter particle="bubblesair" anglemin="0" anglemax="360" particleamount="1" velocitymin="0" velocitymax="20" scalemin="0.5" scalemax="1" />
+      </StatusEffect>
+      <!-- Make destructible when launched -->
+      <StatusEffect type="OnUse" target="This" Indestructible="false"/>
+      <StatusEffect type="OnImpact" target="this" setvalue="true" condition="-100"/>
+      <!-- Effects when taking damage-->
+      <StatusEffect type="OnDamaged" target="This" disabledeltatime="true" setvalue="true">
+        <particleemitter particle="shrapnel" drawontop="true" particleamount="5" velocitymin="100" velocitymax="500" anglemin="0" anglemax="360" distancemin="0" distancemax="20" scalemin="0.1" scalemax="0.35" />
+        <Sound file="Content/Sounds/Damage/HitArmor1.ogg" range="800" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This">
+        <sound file="Content/Items/Weapons/ExplosionDebris4.ogg" range="5000" />
+        <sound file="Content/Items/Weapons/ExplosionDebris5.ogg" range="5000" />
+      </StatusEffect>
+      <!-- Trigger explosions on contained items -->
+      <StatusEffect type="OnBroken" target="Contained" >
+        <sound file="Content/Items/Weapons/ExplosionLarge1.ogg" range="20000" />
+        <sound file="Content/Items/Weapons/ExplosionLarge2.ogg" range="20000" />
+        <Explosion range="700.0" ballastfloradamage="150" structuredamage="175" itemdamage="500" force="17.5" severlimbsprobability="0.5" debris="true" decal="explosion" decalsize="0.5" penetration="0.5">
+          <Affliction identifier="explosiondamage" strength="150" dividebylimbcount="true"/>
+          <Affliction identifier="burn" strength="15" probability="0.2" dividebylimbcount="false"/>
+          <Affliction identifier="bleeding" strength="40" probability="0.05" dividebylimbcount="false"/>
+          <Affliction identifier="stun" strength="7" />
+        </Explosion>
+        <Use />
+      </StatusEffect>
+      <!-- Remove the item after exploding -->
+      <StatusEffect type="OnBroken" target="This" delay="0.01">
+        <Remove />
+      </StatusEffect>
+    </Projectile>
+    <ItemContainer hideitems="true" capacity="1" maxstacksize="1" canbeselected="false" containedstateindicatorstyle="explosive" containedspritedepth="0.81">
+      <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="64,384,64,64" origin="0.5,0.5" />
+      <GuiFrame relativesize="0.2,0.25" anchor="Center" minsize="140,170" maxsize="280,280" style="ItemUI" />
+      <Containable items="smallitem,explosive" />
+    </ItemContainer>
+    <Quality>
+      <QualityStat stattype="ExplosionRadius" value="0.1"/>
+      <QualityStat stattype="ExplosionDamage" value="0.1"/>
+    </Quality>
+  </Item>
   <!-- Aerial Charges float upwards -->
   <Item name="Aerial Charge Shell" identifier="aerialchargeshell" tags="depthchargeammo,demolitionsexpert" category="Weapon" sonarsize="5" scale="0.42" impactsoundtag="impact_metal_heavy" damagedbymonsters="true" damagedbyexplosions="true" damagedbyrepairtools="true" damagedbyprojectiles="true" damagedbymeleeweapons="true" indestructible="true" health="10" cargocontaineridentifier="">
     <Upgrade gameversion="0.20.4.0" scale="0.4"/>
@@ -108,8 +232,8 @@
         <Conditional InWater="false" />
       </StatusEffect>
     </Holdable>
-    <!-- launchimpulse is -56 instead of 0 -->
-    <Projectile characterusable="false" launchimpulse="-56" maxtargetstohit="20" damagedoors="true">
+    <!-- launchimpulse is -55 instead of 0 -->
+    <Projectile characterusable="false" launchimpulse="-55" maxtargetstohit="20" damagedoors="true">
       <Attack structuredamage="75" itemdamage="50" severlimbsprobability="2.5" penetration="0.5" targetforce="350">
         <Affliction identifier="explosiondamage" strength="100" />
         <Affliction identifier="bleeding" strength="10" />
@@ -844,4 +968,18 @@
     </Projectile>
   </Item>
 </Override>
+<!-- fx -->
+  <Item identifier="zapfx" tags="fx" scale="0.5" hideinmenus="true" HiddenInGame="true" noninteractable="true">
+    <Sprite texture="Content/Items/InventoryIconAtlas.png" depth="0.54" sourcerect="0,0,1,1" />
+    <ItemComponent>
+      <StatusEffect target="This" type="Always">
+        <Sound file="Content/Sounds/Damage/Electrocution1.ogg" range="1000" />
+        <Explosion range="100.0" force="1.0" flames="false" shockwave="false" sparks="true" underwaterbubble="false" />
+		    <ParticleEmitter particle="ElectricShock" DistanceMin="10" DistanceMax="25" ParticleAmount="5" ScaleMin="0.1" ScaleMax="0.12" />
+      </StatusEffect>
+      <StatusEffect target="This" type="OnSpawn" delay="0.2">
+        <Remove />
+      </StatusEffect>
+    </ItemComponent>
+  </Item>
 </Items>

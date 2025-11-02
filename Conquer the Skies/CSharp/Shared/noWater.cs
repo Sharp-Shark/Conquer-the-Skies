@@ -21,6 +21,8 @@ namespace NoWater
 
         public static string MESSAGE_JETSUIT_PARTICLE = "cts_jetsuit_particle";
 
+        public static bool OutsideHasAir = false;
+
         public void Initialize()
         {
             harmony = new Harmony("no.water");
@@ -207,6 +209,10 @@ namespace NoWater
 
             if (swimInAir)
             {
+                if (OutsideHasAir)
+                {
+				    __instance.character.Oxygen = 100f;  
+                }
                 __instance.character.PressureProtection = 20000f;
                 __instance.inWater = true;
                 __instance.headInWater = true;
@@ -220,6 +226,10 @@ namespace NoWater
             //ragdoll isn't in any room -> it's in the water + outside is no water dummy
             else if (__instance.currentHull == null)
             {
+                if (OutsideHasAir)
+                {
+				    __instance.character.Oxygen = 100f;  
+                }
                 __instance.character.PressureProtection = 20000f;
                 __instance.inWater = false;
                 __instance.headInWater = false;
@@ -608,7 +618,14 @@ namespace NoWater
         {
             float sizeModifier = __instance.Size * __instance.open;
 
-            hull1.Oxygen -= 100.0f * sizeModifier * deltaTime;
+            if (OutsideHasAir)
+            {
+                hull1.Oxygen += 300.0f * sizeModifier * deltaTime;
+            }
+            else
+            {
+                hull1.Oxygen -= 100.0f * sizeModifier * deltaTime;
+            }
             if (hull1.WaterVolume <= 0.0f) { return false; }
 
             __instance.flowTargetHull = hull1;
@@ -846,10 +863,13 @@ namespace NoWater
 #if SERVER
             foreach (Barotrauma.Networking.Client client in Barotrauma.Networking.Client.ClientList)
             {
-                IWriteMessage message = GameMain.LuaCs.Networking.Start(MESSAGE_JETSUIT_PARTICLE);
-                message.WriteUInt16(character.ID);
-                message.WriteUInt16(__instance.item.ID);
-                GameMain.LuaCs.Networking.Send(message, client.Connection);
+                if(client.InGame)
+                {
+                    IWriteMessage message = GameMain.LuaCs.Networking.Start(MESSAGE_JETSUIT_PARTICLE);
+                    message.WriteUInt16(character.ID);
+                    message.WriteUInt16(__instance.item.ID);
+                    GameMain.LuaCs.Networking.Send(message, client.Connection);
+                }
             }
 #endif
 

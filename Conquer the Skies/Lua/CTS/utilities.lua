@@ -110,6 +110,39 @@ CTS.tablePrint = function (t, output, long, depth, chars, history)
 	return out
 end
 
+-- Get the size of a table (for tables that aren't like an array, #t won't work)
+CTS.tableSize = function (t)
+	local size = 0
+	for item in t do size = size + 1 end
+	return size
+end
+
+-- Splits a string into a table
+CTS.stringSplit = function (str, split)
+	local tbl = {}
+	local build = ''
+	local temp = ''
+	local splitPoint = nil
+	for count = 1, #str do
+		local char = string.sub(str, count, count)
+		build = build .. char
+		if char == string.sub(split, #temp + 1, #temp + 1) then
+			temp = temp .. char
+		elseif char == string.sub(split, 1, 1) then
+			temp = char
+		else
+			temp = ''
+		end
+		if temp == split then
+			table.insert(tbl, string.sub(build, 1, #build - #temp))
+			build = ''
+			temp = ''
+		end
+	end
+	table.insert(tbl, build)
+	return tbl
+end
+
 -- Find waypoints by job
 CTS.findWaypointsByJob = function (submarine, job)
 	local waypoints = {}
@@ -133,6 +166,11 @@ end
 CTS.findRandomWaypointByJob = function (submarine, job)
 	local waypoints = CTS.findWaypointsByJob(submarine, job)
 	return waypoints[math.random(#waypoints)]
+end
+
+CTS.giveAfflictionCharacter = function (character, identifier, amount, limb)
+	local limb = limb or character.AnimController.MainLimb
+	character.CharacterHealth.ApplyAffliction(limb, AfflictionPrefab.Prefabs[identifier].Instantiate(amount))
 end
 
 -- Flip submarine X
@@ -165,4 +203,8 @@ CTS.freezeCharacter = function (character, bool)
 	end
 	
 	print(character, ' state: ', value)
+end
+
+CTS.setOutsideHasOxygen = function (bool)
+	CTS.NoWaterClass.Type.OutsideHasAir = bool
 end

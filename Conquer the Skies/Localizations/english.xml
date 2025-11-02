@@ -10,6 +10,8 @@
   <biomename.thegreatsea>The Great Void</biomename.thegreatsea>
   </Override>
 
+  <entityname.torpedochargeshell>Torpedo Charge Shell</entityname.torpedochargeshell>
+  <entitydescription.torpedochargeshell>A neutral buoyancy torpedo. Will propel itself and then explode.</entitydescription.torpedochargeshell>
   <entityname.aerialchargeshell>Aerial Charge Shell</entityname.aerialchargeshell>
   <entitydescription.aerialchargeshell>A tank of suspendium and a payload. Will float up and then explode.</entitydescription.aerialchargeshell>
   <entityname.mortarshell>Mortar Railgun Shell</entityname.mortarshell>
