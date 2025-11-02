@@ -31,7 +31,7 @@ Hook.Add("CTS.torpedocharge.onnotcontained", "CTS.torpedocharge.onnotcontained",
     local norm = item.body.LinearVelocity.Length()
     if norm < 1 then return end
 
-    item.body.ApplyLinearImpulse(0.6 * item.body.LinearVelocity / norm * dt)
+    item.body.ApplyLinearImpulse(1.5 * item.body.LinearVelocity / norm * dt)
     item.body.ApplyLinearImpulse(item.body.LinearVelocity * -0.1 * dt)
 end)
 

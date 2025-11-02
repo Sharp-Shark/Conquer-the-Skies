@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<contentpackage name="Conquer the Skies" modversion="1.0.12" corepackage="False" steamworkshopid="3589292349" gameversion="1.10.7.2">
+<contentpackage name="Conquer the Skies" modversion="1.0.13" corepackage="False" steamworkshopid="3589292349" gameversion="1.10.7.2">
   <BackgroundCreaturePrefabs file="%ModDir%/Biomes/BackgroundCreaturePrefabs.xml" />
   <LevelGenerationParameters file="%ModDir%/Biomes/Biomes.xml" />
   <LevelGenerationParameters file="%ModDir%/Biomes/Open Skies/OpenSkies.xml" />
