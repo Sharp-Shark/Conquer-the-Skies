@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<contentpackage name="Conquer the Skies" modversion="1.0.11" corepackage="False" steamworkshopid="3589292349" gameversion="1.10.7.2">
+<contentpackage name="Conquer the Skies" modversion="1.0.12" corepackage="False" steamworkshopid="3589292349" gameversion="1.10.7.2">
   <BackgroundCreaturePrefabs file="%ModDir%/Biomes/BackgroundCreaturePrefabs.xml" />
   <LevelGenerationParameters file="%ModDir%/Biomes/Biomes.xml" />
   <LevelGenerationParameters file="%ModDir%/Biomes/Open Skies/OpenSkies.xml" />
@@ -8,7 +8,6 @@
   <Jobs file="%ModDir%/Misc/Jobs.xml" />
   <Item file="%ModDir%/Items/Items.xml" />
   <Text file="%ModDir%/Localizations/english.xml" />
-  <Submarine file="%ModDir%/Submarines/Testbox.sub" />
   <Submarine file="%ModDir%/Submarines/HMS Rammack.sub" />
   <Submarine file="%ModDir%/Submarines/Biplane.sub" />
   <Submarine file="%ModDir%/Submarines/Hussar.sub" />
@@ -22,4 +21,5 @@
   <Submarine file="%ModDir%/Submarines/HMS Fortress.sub" />
   <Submarine file="%ModDir%/Submarines/HMS Parabolic.sub" />
   <Submarine file="%ModDir%/Submarines/HMS Brick.sub" />
+  <Submarine file="%ModDir%/Submarines/Testbox.sub" />
 </contentpackage>

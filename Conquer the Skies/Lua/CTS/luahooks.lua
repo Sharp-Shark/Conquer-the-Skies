@@ -36,6 +36,8 @@ Hook.Add("CTS.torpedocharge.onnotcontained", "CTS.torpedocharge.onnotcontained",
 end)
 
 Hook.Patch("Barotrauma.Items.Components.Wire", "RemoveConnection", {'Barotrauma.Item'}, function(instance, ptable)
+    if CLIENT and Game.IsSingleplayer and Game.IsSubEditor then return end
+
     local item = ptable['item']
     if item == nil then return end
     if not item.HasTag('turret') then return end
@@ -45,7 +47,6 @@ Hook.Patch("Barotrauma.Items.Components.Wire", "RemoveConnection", {'Barotrauma.
 
     local character = component.User
     if character == nil then return end
-    if CLIENT and Game.IsSingleplayer and Game.IsSubEditor then return end
 
     local oldConnection
     for connection in instance.Connections do
