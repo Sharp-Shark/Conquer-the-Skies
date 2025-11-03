@@ -26,7 +26,10 @@ Hook.Add("CTS.torpedocharge.onnotcontained", "CTS.torpedocharge.onnotcontained",
     local dt = 60 * deltaTime
 
     local component = item.GetComponentString('Projectile')
-    if (component == nil) or (not item.GetComponentString('Projectile').IsActive) then return end
+    if (component == nil) or (not item.GetComponentString('Projectile').IsActive) then
+        item.body.ApplyLinearImpulse(Vector2(0, 0.05) * dt)
+        return
+    end
 
     local norm = item.body.LinearVelocity.Length()
     if norm < 1 then return end
@@ -46,7 +49,7 @@ Hook.Patch("Barotrauma.Items.Components.Wire", "RemoveConnection", {'Barotrauma.
     if component == nil then return end
 
     local character = component.User
-    if character == nil then return end
+    if (character == nil) or character.Removed then return end
 
     local oldConnection
     for connection in instance.Connections do
@@ -59,13 +62,19 @@ Hook.Patch("Barotrauma.Items.Components.Wire", "RemoveConnection", {'Barotrauma.
 
     Timer.NextFrame(function ()
         local newConnection
+        local otherConnection
         for connection in instance.Connections do
             if connection.Item == item then
                 newConnection = connection
-                break
+            else
+                otherConnection = connection
             end
         end
-        if connection == oldConnection or oldConnection == nil then return end
+        local nameMatches = false
+        if newConnection ~= nil and otherConnection ~= nil then
+            nameMatches = string.sub(newConnection.Name, 1, #newConnection.Name - 3) == string.sub(otherConnection.Name, 1, #otherConnection.Name - 4)
+        end
+        if connection == oldConnection or oldConnection == nil or nameMatches then return end
 
         CTS.giveAfflictionCharacter(character, 'stun', 4)
         CTS.giveAfflictionCharacter(character, 'electricshock', 60)

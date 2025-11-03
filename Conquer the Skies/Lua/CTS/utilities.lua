@@ -169,7 +169,6 @@ CTS.findRandomWaypointByJob = function (submarine, job)
 end
 
 CTS.giveAfflictionCharacter = function (character, identifier, amount, limb)
-	if character == nil then return end
 	local limb = limb or character.AnimController.MainLimb
 	character.CharacterHealth.ApplyAffliction(limb, AfflictionPrefab.Prefabs[identifier].Instantiate(amount))
 end

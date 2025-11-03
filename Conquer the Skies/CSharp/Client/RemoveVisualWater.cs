@@ -29,10 +29,15 @@ namespace NoWater
 			prefix: new HarmonyMethod(typeof(NoWaterModCS).GetMethod("OverrideUpdateStatusHUD"))
 			);
             /* New Patches, not from the No Water Mod */
-			harmony.Patch(
-			original: typeof(Particle).GetMethod("Draw"),
-			prefix: new HarmonyMethod(typeof(NoWaterModCS).GetMethod("OverrideParticleDraw"))
-			);
+            harmony.Patch(
+            original: typeof(Particle).GetMethod("Draw"),
+            prefix: new HarmonyMethod(typeof(NoWaterModCS).GetMethod("OverrideParticleDraw"))
+            );
+            // do not draw sonar when not held
+            harmony.Patch(
+            original: typeof(Barotrauma.Items.Components.Sonar).GetMethod("Update", AccessTools.all),
+            prefix: new HarmonyMethod(typeof(NoWaterModCS).GetMethod("OverrideSonarUpdate"))
+            );
 		}
 		
 		public void OnLoadCompleted() { }
@@ -320,14 +325,27 @@ namespace NoWater
         // new patches
         public static bool OverrideParticleDraw(Particle __instance, SpriteBatch spriteBatch)
         {
-            if(__instance.DrawTarget == ParticlePrefab.DrawTargetType.Water && (__instance.currentHull == null || __instance.position.Y >= __instance.currentHull.Surface)){
+            if (__instance.DrawTarget == ParticlePrefab.DrawTargetType.Water && (__instance.currentHull == null || __instance.position.Y >= __instance.currentHull.Surface))
+            {
                 return false;
             }
-            if(__instance.DrawTarget == ParticlePrefab.DrawTargetType.Air)
+            if (__instance.DrawTarget == ParticlePrefab.DrawTargetType.Air)
             {
                 __instance.Prefab.DrawTarget = ParticlePrefab.DrawTargetType.Both;
             }
             return true;
+        }
+        public static void OverrideSonarUpdate(Barotrauma.Items.Components.Sonar __instance)
+        {
+            Item item = __instance.item;
+            Barotrauma.Items.Components.Propulsion propulsion = item.GetComponent<Barotrauma.Items.Components.Propulsion>();
+            if (propulsion == null) { return; }
+
+            Barotrauma.Items.Components.Holdable holdable = item.GetComponent<Barotrauma.Items.Components.Holdable>();
+            if (holdable == null) { return; }
+
+            __instance.controlContainer.Visible = holdable.IsActive;
+            __instance.sonarView.Visible = holdable.IsActive;
         }
 	}
 }
