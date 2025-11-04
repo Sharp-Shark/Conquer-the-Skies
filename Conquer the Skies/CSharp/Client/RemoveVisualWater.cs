@@ -34,10 +34,12 @@ namespace NoWater
             prefix: new HarmonyMethod(typeof(NoWaterModCS).GetMethod("OverrideParticleDraw"))
             );
             // do not draw sonar when not held
+            /* disabled for testing
             harmony.Patch(
             original: typeof(Barotrauma.Items.Components.Sonar).GetMethod("Update", AccessTools.all),
             prefix: new HarmonyMethod(typeof(NoWaterModCS).GetMethod("OverrideSonarUpdate"))
             );
+            */
 		}
 		
 		public void OnLoadCompleted() { }

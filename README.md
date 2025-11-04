@@ -1,4 +1,4 @@
-# Conquer the Skies v1.0.14
+# Conquer the Skies v1.0.15
 
 Barotrauma mod that turns submarines into airships. A fork of the No Water mod by DrBruhman.
 
