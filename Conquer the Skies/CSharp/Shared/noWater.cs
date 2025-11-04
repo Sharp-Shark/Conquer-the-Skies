@@ -234,7 +234,8 @@ namespace NoWater
                 __instance.inWater = false;
                 __instance.headInWater = false;
                 __instance.RefreshFloorY(deltaTime, false);
-                if (__instance.TargetMovement.X == 0f && __instance.Collider.LinearVelocity.Y < -1.0f)
+                // __instance.TargetMovement.X == 0f
+                if (__instance.Collider.LinearVelocity.Y < -1.0f)
                 {
                     __instance.ForceRefreshFloorY();
                 }
