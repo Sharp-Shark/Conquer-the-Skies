@@ -5,7 +5,7 @@
       identifier="openskies"
       name="Open Skies"
       description=""
-      AllowedZones="1,2,3,4,5"
+      AllowedZones=""
       ExperienceFromMissionRewards="0.09"
       mindifficulty="0"
       maxdifficulty="15">
