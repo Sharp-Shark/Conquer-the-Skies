@@ -38,6 +38,19 @@ Hook.Add("CTS.torpedocharge.onnotcontained", "CTS.torpedocharge.onnotcontained",
     item.body.ApplyLinearImpulse(item.body.LinearVelocity * -0.1 * dt)
 end)
 
+Hook.Add("CTS.affliction", "CTS.affliction", function(effect, deltaTime, item, targets, worldPosition, element)
+    local identifier = element.GetAttributeString("identifier", "null")
+    local strength = element.GetAttributeFloat("strength", 0)
+    local maxStrength = element.GetAttributeFloat("maxstrength", 0)
+    if identifier == "null" then return end
+
+    local character = targets[1]
+    if character == nil then return end
+
+    local currentStrength = character.characterHealth.GetAfflictionStrengthByIdentifier(identifier, true)
+    CTS.giveAfflictionCharacter(character, identifier, math.min(strength, maxStrength - currentStrength))
+end)
+
 Hook.Patch("Barotrauma.Items.Components.Wire", "RemoveConnection", {'Barotrauma.Item'}, function(instance, ptable)
     if CLIENT and Game.IsSingleplayer and Game.IsSubEditor then return end
 

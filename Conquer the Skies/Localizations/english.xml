@@ -10,6 +10,8 @@
   <biomename.thegreatsea>The Great Void</biomename.thegreatsea>
   </Override>
 
+  <entityname.rubberspear>Rubber Harpoon</entityname.rubberspear>
+  <entitydescription.rubberspear>A harpoon for the harpoon gun. Uses a suction cup to non-lethally stick to targets. Can be used as a grappling hook.</entitydescription.rubberspear>
   <entityname.torpedochargeshell>Torpedo Charge Shell</entityname.torpedochargeshell>
   <entitydescription.torpedochargeshell>A neutral buoyancy torpedo. Will propel itself and then explode.</entitydescription.torpedochargeshell>
   <entityname.aerialchargeshell>Aerial Charge Shell</entityname.aerialchargeshell>
