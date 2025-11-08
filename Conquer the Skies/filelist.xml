@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<contentpackage name="Conquer the Skies" modversion="1.0.18" corepackage="False" steamworkshopid="3589292349" gameversion="1.10.7.2">
+<contentpackage name="Conquer the Skies" modversion="1.0.19" corepackage="False" steamworkshopid="3589292349" gameversion="1.10.7.2">
   <BackgroundCreaturePrefabs file="%ModDir%/Biomes/BackgroundCreaturePrefabs.xml" />
   <LevelGenerationParameters file="%ModDir%/Biomes/Biomes.xml" />
   <LevelGenerationParameters file="%ModDir%/Biomes/Open Skies/OpenSkies.xml" />
@@ -8,7 +8,6 @@
   <Jobs file="%ModDir%/Misc/Jobs.xml" />
   <Item file="%ModDir%/Items/Items.xml" />
   <Text file="%ModDir%/Localizations/english.xml" />
-  <Submarine file="%ModDir%/Submarines/HMS Rammack.sub" />
   <Submarine file="%ModDir%/Submarines/Hussar.sub" />
   <Submarine file="%ModDir%/Submarines/Testbox.sub" />
   <Submarine file="%ModDir%/Submarines/HMS Bloatfish.sub" />
@@ -18,10 +17,12 @@
   <Submarine file="%ModDir%/Submarines/HMS Canoa.sub" />
   <Submarine file="%ModDir%/Submarines/HMS Parabolic.sub" />
   <Submarine file="%ModDir%/Submarines/HMS Longhaul.sub" />
-  <Submarine file="%ModDir%/Submarines/HMS Leatherback.sub" />
   <Submarine file="%ModDir%/Submarines/HMS Anguilliform.sub" />
   <Submarine file="%ModDir%/Submarines/HMS Atto.sub" />
   <Submarine file="%ModDir%/Submarines/HMS Carriage.sub" />
-  <Submarine file="%ModDir%/Submarines/HMS Fortress.sub" />
   <Submarine file="%ModDir%/Submarines/HMS Cranium.sub" />
+  <Submarine file="%ModDir%/Submarines/HMS Leatherback.sub" />
+  <Submarine file="%ModDir%/Submarines/HMS Rammack.sub" />
+  <Submarine file="%ModDir%/Submarines/HMS Fortress.sub" />
+  <Submarine file="%ModDir%/Submarines/HMS Maelstrom.sub" />
 </contentpackage>
