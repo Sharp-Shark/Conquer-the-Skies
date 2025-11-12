@@ -51,6 +51,7 @@ Hook.Add("CTS.affliction", "CTS.affliction", function(effect, deltaTime, item, t
     CTS.giveAfflictionCharacter(character, identifier, math.min(strength, maxStrength - currentStrength))
 end)
 
+--[[ shocks players when unwiring turrets
 Hook.Patch("Barotrauma.Items.Components.Wire", "RemoveConnection", {'Barotrauma.Item'}, function(instance, ptable)
     if CLIENT and Game.IsSingleplayer and Game.IsSubEditor then return end
 
@@ -95,6 +96,7 @@ Hook.Patch("Barotrauma.Items.Components.Wire", "RemoveConnection", {'Barotrauma.
         Entity.Spawner.AddItemToSpawnQueue(ItemPrefab.GetItemPrefab('zapfx'), item.WorldPosition, nil, nil, function (spawnedItem) end)
     end)
 end)
+]]--
 
 --[[ funny float physics
 local float = {}
