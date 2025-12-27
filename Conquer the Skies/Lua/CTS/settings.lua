@@ -7,6 +7,7 @@ CTS.saving.savePath = CTS.saving.folderPath .. 'Conquer the Skies.json'
 -- Which keys should have their values saved
 CTS.saving.keys = {
 	'NoWaterClass.Type.OutsideHasAir',
+	'NoWaterClass.Type.FlyingMonsters',
 }
 
 -- Get any value from the table CTS
@@ -79,9 +80,10 @@ CTS.saving.boot = function ()
 end
 
 -- Commands
+
 -- Debug console cts_toggleoxygen
 local func = function (args)
-	local bool = not CTS.NoWaterClass.Type.OutsideHasAir
+	local bool = not CTS.getOutsideHasOxygen()
 	CTS.setOutsideHasOxygen(bool)
 	if bool then
 		print('Enabled oxygen outside.')
@@ -90,9 +92,7 @@ local func = function (args)
 	end
 
 	if SERVER then
-		local message = Networking.Start("cts_setOutsideHasOxygen")
-		message.WriteBoolean(CTS.NoWaterClass.Type.OutsideHasAir)
-		Networking.Send(message)
+		CTS.syncSettings()
 	end
 
 	CTS.saving.save()
@@ -101,3 +101,24 @@ if CLIENT and Game.IsMultiplayer then
 	func = function () return end
 end
 Game.AddCommand('cts_toggleoxygen', 'Toggles whether there is or isn\'t oxygen outside.', func, nil, false)
+
+-- Debug console cts_toggleflight
+local func = function (args)
+	local bool = not CTS.getMonstersFly()
+	CTS.setMonstersFly(bool)
+	if bool then
+		print('Enabled flying monsters.')
+	else
+		print('Disabled flying monsters.')
+	end
+
+	if SERVER then
+		CTS.syncSettings()
+	end
+
+	CTS.saving.save()
+end
+if CLIENT and Game.IsMultiplayer then
+	func = function () return end
+end
+Game.AddCommand('cts_toggleflight', 'Toggles whether there is or isn\'t flying monsters.', func, nil, false)

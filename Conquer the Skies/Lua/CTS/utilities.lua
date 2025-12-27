@@ -205,6 +205,12 @@ CTS.freezeCharacter = function (character, bool)
 	print(character, ' state: ', value)
 end
 
+CTS.getOutsideHasOxygen = function() return CTS.NoWaterClass.Type.OutsideHasAir end
 CTS.setOutsideHasOxygen = function (bool)
 	CTS.NoWaterClass.Type.OutsideHasAir = bool
+end
+
+CTS.getMonstersFly = function() return CTS.NoWaterClass.Type.FlyingMonsters end
+CTS.setMonstersFly = function (bool)
+	CTS.NoWaterClass.Type.FlyingMonsters = bool
 end

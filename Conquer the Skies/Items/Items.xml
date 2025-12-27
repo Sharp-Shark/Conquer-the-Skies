@@ -39,7 +39,7 @@
         <Affliction identifier="blunttrauma" strength="5" />
         <StatusEffect type="OnUse" target="UseTarget">
           <Conditional entitytype="eq Character" />
-          <LuaHook name="CTS.affliction" identifier="stun" strength="2.5" maxstrength="2.5" />
+          <LuaHook name="CTS.affliction" identifier="stun" strength="3" maxstrength="3" />
         </StatusEffect>
       </Attack>
       <StatusEffect type="OnActive" target="UseTarget,This" checkconditionalalways="true" comparison="And" disabledeltatime="true">

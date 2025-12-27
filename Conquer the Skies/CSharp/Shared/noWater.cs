@@ -21,7 +21,9 @@ namespace NoWater
 
         public static string MESSAGE_JETSUIT_PARTICLE = "cts_jetsuit_particle";
 
-        public static bool OutsideHasAir = false;
+		// customizable
+		public static bool OutsideHasAir = false;
+		public static bool FlyingMonsters = true;
 
         public void Initialize()
         {
@@ -160,7 +162,8 @@ namespace NoWater
             }
             // if true, creature can swim in the air when outside a submarine
             bool swimInAir = __instance.character.SpeciesName != "human".ToIdentifier() && (__instance.currentHull == null || !__instance.character.IsHumanoid && (__instance.character.NeedsWater || !__instance.onGround || (Math.Abs(__instance.targetMovement.Y) > 0))) && !__instance.character.IsDead;
-
+			if (!FlyingMonsters) { swimInAir = false; }
+			
             if (!__instance.character.Enabled || __instance.character.Removed || __instance.Frozen || __instance.Invalid || __instance.Collider == null || __instance.Collider.Removed) { return false; }
 
             while (__instance.impactQueue.Count > 0)
@@ -235,7 +238,7 @@ namespace NoWater
                 __instance.headInWater = false;
                 __instance.RefreshFloorY(deltaTime, false);
                 // __instance.TargetMovement.X == 0f
-                if (__instance.Collider.LinearVelocity.Y < -1.0f)
+                if (__instance.TargetMovement.X == 0f || __instance.Collider.LinearVelocity.Y < -1.0f)
                 {
                     __instance.ForceRefreshFloorY();
                 }
