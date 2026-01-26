@@ -88,6 +88,53 @@ CTS.thinkFunctions.openskies = function ()
 	end
 end
 
+-- START OF EXPERIMENTAL BASIC VELOCITY SYNCING
+--[[
+if SERVER then
+	CTS.syncCountdown = {}
+	local initial = 60
+	CTS.thinkFunctions.experimental = function ()
+		local visited = {}
+		for character in Character.CharacterList do
+			visited[character] = true
+			
+			if (CTS.syncCountdown[character] == nil) or character.AnimController.OnGround or (character.CurrentSpeed < 10) then CTS.syncCountdown[character] = initial end
+			
+			CTS.syncCountdown[character] = CTS.syncCountdown[character] - 1
+			
+			if CTS.syncCountdown[character] <= 0 then
+				CTS.syncCountdown[character] = initial
+				
+				for client in Client.ClientList do
+					if client.Character == character then
+						--print('synccharvel: ', character.Name)
+						local message = Networking.Start("synccharvel")
+						message.WriteSingle(character.AnimController.Collider.LinearVelocity.X)
+						message.WriteSingle(character.AnimController.Collider.LinearVelocity.Y)
+						Networking.Send(message, client.Connection)
+						break
+					end
+				end
+			end
+		end
+		-- avoid memory leak
+		for character, value in pairs(CTS.syncCountdown) do
+			if not visited[character] then CTS.syncCountdown[character] = nil end
+		end
+	end
+elseif Game.IsMultiplayer then
+    Networking.Receive("synccharvel", function (message, client)
+        if Character.Controlled ~= nil then
+			--print('synccharvel: ', Character.Controlled.Name)
+			local x = message.ReadSingle()
+			local y = message.ReadSingle()
+			Character.Controlled.AnimController.Collider.LinearVelocity = Vector2(x, y)
+		end
+    end)
+end
+--]]
+-- END OF EXPERIMENTAL BASIC VELOCITY SYNCING
+
 -- Manages submarine flippedX
 CTS.autoSubFlip = false
 local syncsubflippedx_next = Timer.Time + 1
