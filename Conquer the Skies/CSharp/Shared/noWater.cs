@@ -853,6 +853,7 @@ namespace NoWater
             Vector2 propulsion = dir * __instance.Force * 2.0f * character.PropulsionSpeedMultiplier * (1.0f + character.GetStatValue(StatTypes.PropulsionSpeed));
             character.AnimController.onGround = false;
 
+            character.AnimController.Collider.LinearVelocity += character.AnimController.Collider.LinearVelocity * -0.04f;
             character.AnimController.Collider.ApplyForce(propulsion);
 
 #if CLIENT
@@ -898,6 +899,7 @@ namespace NoWater
             if (dir.Y * __instance.Force <= 0 || character.IsKeyDown(InputType.Crouch)) { return; }
 
             character.AnimController.onGround = false;
+            character.AnimController.Collider.LinearVelocity += character.AnimController.Collider.LinearVelocity * -0.02f;
         }
         public static void OverrideGetImpactDamage(Ragdoll __instance, ref float __result, float impact, float? impactTolerance = null)
         {
