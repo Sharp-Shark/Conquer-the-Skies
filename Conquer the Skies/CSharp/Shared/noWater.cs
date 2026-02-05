@@ -844,7 +844,7 @@ namespace NoWater
 
             Vector2 move = new Vector2((character.IsKeyDown(InputType.Right) ? 1.0f : 0.0f) - (character.IsKeyDown(InputType.Left) ? 1.0f : 0.0f),
             (character.IsKeyDown(InputType.Up) ? 1.0f : 0.0f) - (character.IsKeyDown(InputType.Down) ? 1.0f : 0.0f));
-            move.Y = MathHelper.Max(0, move.Y); // when going down, just freefall instead
+            //move.Y = MathHelper.Max(0, move.Y); // when going down, just freefall instead
             if (move.LengthSquared() <= 0) { return false; }
 
             Vector2 dir = Vector2.Normalize(move) * 0.6f;
@@ -853,8 +853,8 @@ namespace NoWater
             Vector2 propulsion = dir * __instance.Force * 2.0f * character.PropulsionSpeedMultiplier * (1.0f + character.GetStatValue(StatTypes.PropulsionSpeed));
             character.AnimController.onGround = false;
 
-            character.AnimController.Collider.LinearVelocity += character.AnimController.Collider.LinearVelocity * -0.04f;
-            character.AnimController.Collider.ApplyForce(propulsion);
+            character.AnimController.Collider.LinearVelocity += character.AnimController.Collider.LinearVelocity * -0.02f; // friction
+            character.AnimController.Collider.ApplyForce(propulsion - GameMain.World.Gravity);
 
 #if CLIENT
             if (!string.IsNullOrWhiteSpace(__instance.particles))
@@ -899,7 +899,8 @@ namespace NoWater
             if (dir.Y * __instance.Force <= 0 || character.IsKeyDown(InputType.Crouch)) { return; }
 
             character.AnimController.onGround = false;
-            character.AnimController.Collider.LinearVelocity += character.AnimController.Collider.LinearVelocity * -0.02f;
+            character.AnimController.Collider.LinearVelocity += character.AnimController.Collider.LinearVelocity * -0.02f; // friction
+            character.AnimController.Collider.ApplyForce(GameMain.World.Gravity * -1);
         }
         public static void OverrideGetImpactDamage(Ragdoll __instance, ref float __result, float impact, float? impactTolerance = null)
         {
