@@ -20,6 +20,8 @@
   <entitydescription.mortarshell>Similar to a regular railgun shell, but has a more intense ballistic arc due to added weight. Can be loaded with additional explosives that detonate upon impact.</entitydescription.mortarshell>
 
   <Override>
+  <entitydescription.steroids>Temporarily increases muscular strength.</entitydescription.steroids>
+  <afflictiondescription.strengthen>Patient's muscular strength is increased.</afflictiondescription.strengthen>
   <entityname.abyssdivingsuit>Heavy Suit</entityname.abyssdivingsuit>
   <entitydescription.abyssdivingsuit>A cumbersome but sturdy suit designed for ship defense. Protects against damage and high pressure up to 6,600 meters. Due to the weight, powered flight is not possible and walking speed is slow.</entitydescription.abyssdivingsuit>
   <entityname.abyssdivingsuit>Heavy Suit</entityname.abyssdivingsuit>

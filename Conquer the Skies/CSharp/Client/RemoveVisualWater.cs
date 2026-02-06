@@ -38,6 +38,11 @@ namespace NoWater
             original: typeof(Barotrauma.Items.Components.Sonar).GetMethod("Update", AccessTools.all),
             prefix: new HarmonyMethod(typeof(NoWaterModCS).GetMethod("OverrideSonarUpdate"))
             );
+			// if a nav terminal is linked to a turret it'll draw the line of fire of the turret
+            harmony.Patch(
+            original: typeof(Barotrauma.Items.Components.Sonar).GetMethod("DrawSonar", AccessTools.all, new Type[] { typeof(Microsoft.Xna.Framework.Graphics.SpriteBatch), typeof(Rectangle) }),
+            postfix: new HarmonyMethod(typeof(NoWaterModCS).GetMethod("OverrideSonarDrawHUD"))
+            );
 		}
 		
 		public void OnLoadCompleted() { }
@@ -346,6 +351,35 @@ namespace NoWater
 
             __instance.controlContainer.Visible = holdable.IsActive;
             __instance.sonarView.Visible = holdable.IsActive;
+        }
+        public static void OverrideSonarDrawHUD(Barotrauma.Items.Components.Sonar __instance, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, Rectangle rect)
+        {
+			Vector2 steeringOrigin = rect.Center.ToVector2();
+			Item item = __instance.item;
+			
+			foreach(MapEntity entity in item.linkedTo)
+			{
+				Item turret = entity as Item;
+				if(turret == null) { return; }
+				Barotrauma.Items.Components.Turret component = turret.GetComponent<Barotrauma.Items.Components.Turret>();
+				if(component == null) { continue; }
+				
+				Vector2 turretOrigin = (turret.WorldPosition - item.Submarine.WorldPosition) * __instance.DisplayScale;
+				turretOrigin = Vector2.Multiply(turretOrigin, new Vector2(1, -1));
+				turretOrigin += steeringOrigin;
+				
+				float length = __instance.DisplayRadius - (turretOrigin - steeringOrigin).Length();
+				
+				float angle = component.Rotation;
+				Vector2 turretPos = new Vector2((float) Math.Cos(angle), (float) Math.Sin(angle)) * length * 0.9f;
+				turretPos += turretOrigin;
+				
+				Color color = Color.Orange;
+				if(turret.HasTag("searchlight")) { color = Color.White; }
+				if(turret.HasTag("depthchargelauncher")) { color = Color.Gray; }
+				color.A = (Byte) 255 / 8;
+				GUI.DrawLine(spriteBatch, turretOrigin, turretPos, color, 0f, 2f);
+			}
         }
 	}
 }

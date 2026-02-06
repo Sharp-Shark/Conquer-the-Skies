@@ -171,6 +171,11 @@ if CLIENT then
     end)
 end
 
+-- I hate Ballast Flora
+Hook.Patch("Barotrauma.MapCreatures.Behavior.BallastFloraBehavior", "Update", function(instance, ptable)
+	instance.Kill()
+end, Hook.HookMethodType.After)
+
 -- Load other files
 require 'CTS/networking/server'
 require 'CTS/networking/client'

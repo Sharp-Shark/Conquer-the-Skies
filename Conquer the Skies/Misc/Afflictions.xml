@@ -2,6 +2,25 @@
 <Afflictions>
 
 <Override>
+  <!-- increase melee attack multiplier but removed damage resistance -->
+  <Affliction
+    name="Vigor"
+    identifier="strengthen"
+    description="Increased muscle strength."
+    type="strengthbuff"
+    isbuff="true"
+    limbspecific="false"
+    maxstrength="600"
+    MedicalSkillGain="0.01">
+    <Effect minstrength="0" maxstrength="600"
+      strengthchange="-1">
+      <StatValue stattype="MeleeAttackMultiplier" minvalue="0" maxvalue="1.0" />
+      <StatusEffect target="Character">
+        <TriggerAnimation Type="Walk" filename="VigorousWalk" priority="5" ExpectedSpecies="Human" />
+      </StatusEffect>
+    </Effect>
+    <icon texture="Content/UI/TalentsIcons3.png" sourcerect="384,0,128,128" color="10,193,114,255" origin="0,0"/>
+  </Affliction>
 </Override>
 
 </Afflictions>

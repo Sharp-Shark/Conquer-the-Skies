@@ -115,8 +115,7 @@ namespace NoWater
             original: typeof(Barotrauma.Character).GetProperty("IsProtectedFromPressure").GetGetMethod(),
             prefix: new HarmonyMethod(typeof(NoWaterMod).GetMethod("OverrideIsProtectedFromPressure"))
             );
-
-
+			
 #if CLIENT
             GameMain.LuaCs.Networking.Receive(MESSAGE_JETSUIT_PARTICLE, (object[] args) =>
             {

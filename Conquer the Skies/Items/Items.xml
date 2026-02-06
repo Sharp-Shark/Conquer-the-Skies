@@ -336,7 +336,7 @@
     </ItemContainer>
   </Item>
 <Override>
-  <!-- diving knife now has 50% penetration -->
+  <!-- diving knife now has 100% penetration -->
   <Item name="" identifier="divingknife" category="Weapon" Tags="smallitem,weapon,gunsmith,mountableweapon,sharptool" cargocontaineridentifier="metalcrate" scale="0.5" impactsoundtag="impact_metal_light" RequireAimToUse="True">
     <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab" amount="1" spawnprobability="0.25" />
     <PreferredContainer secondary="abandonedstoragecab,piratestoragecab" amount="1" spawnprobability="0.05" />
@@ -362,7 +362,7 @@
     <Sprite texture="Content/Items/Weapons/weapons_new.png" sourcerect="183,203,66,16" depth="0.55" origin="0.5,0.5" />
     <Body width="65" height="15" density="25" />
     <MeleeWeapon slots="Any,RightHand,LeftHand" aimpos="50,0" handle1="-10,0" holdangle="30" reload="0.75" range="50" combatPriority="25" msg="ItemMsgPickUpSelect">
-      <Attack penetration="0.5" targetimpulse="2" severlimbsprobability="0.1" itemdamage="3" structuredamage="2" structuresoundtype="StructureSlash">
+      <Attack penetration="1.0" targetimpulse="2" severlimbsprobability="0.1" itemdamage="3" structuredamage="2" structuresoundtype="StructureSlash">
         <Affliction identifier="lacerations" strength="15" />
         <Affliction identifier="bleeding" strength="10" />
         <Affliction identifier="stun" strength="0.2" />
@@ -383,7 +383,7 @@
     </Quality>
     <Upgrade gameversion="0.10.0.0" scale="0.5" />
   </Item>
-  <!-- boarding axe now has 50% penetration -->
+  <!-- boarding axe now has 50% penetration and faster reload -->
   <Item name="" identifier="boardingaxe" category="Weapon" Tags="mediumitem,weapon,gunsmith,mountableweapon" scale="0.5" allowasextracargo="true" requireaimtouse="true" impactsoundtag="impact_metal_light">
     <PreferredContainer primary="secarmcab" secondary="armcab"/>
     <Price baseprice="350" sold="false">
@@ -403,7 +403,7 @@
     <InventoryIcon texture="Content/Items/JobGear/TalentGear.png" sourcerect="165,366,64,64" origin="0.5,0.5" />
     <Sprite texture="Content/Items/JobGear/TalentGear.png" sourcerect="1,425,164,53" depth="0.55" origin="0.5,0.2" />
     <Body width="161" height="20" density="25" />
-    <MeleeWeapon slots="Any,RightHand+LeftHand" aimpos="50,0" handle1="-22,2" handle2="-32,5" holdangle="30" aimangle="10" reload="1.2" range="155" combatPriority="40" msg="ItemMsgPickUpSelect">
+    <MeleeWeapon slots="Any,RightHand+LeftHand" aimpos="50,0" handle1="-22,2" handle2="-32,5" holdangle="30" aimangle="10" reload="1.0" range="155" combatPriority="40" msg="ItemMsgPickUpSelect">
       <Attack targetimpulse="5" severlimbsprobability="7.5" itemdamage="30" structuredamage="15" penetration="0.5" >
         <Affliction identifier="lacerations" strength="36" />
         <Affliction identifier="bleeding" strength="10" />
@@ -609,6 +609,10 @@
       <sprite name="SlipSuit Left Shoe" texture="%ModDir%/Items/slipsuit.png" limb="LeftFoot" sound="footstep_armor_heavy" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
       <sprite name="SlipSuit Right Shoe" texture="%ModDir%/Items/slipsuit.png" limb="RightFoot" sound="footstep_armor_heavy" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" />
       <sprite texture="%ModDir%/Items/slipsuit.png" canbehiddenbyotherwearables="false" rotation="85" depth="0.6" sourcerect="0,256,140,102" limb="Torso" depthlimb="Torso" scale="0.5" origin="0.5,0.95" />
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="blunttrauma,gunshotwound,bitewounds,lacerations,bleeding,explosiondamage" damagemultiplier="0.875" damagesound="LimbArmor" deflectprojectiles="true" />
+      <damagemodifier armorsector="0.0,360.0" afflictiontypes="burn" damagemultiplier="0.85" damagesound="" deflectprojectiles="true" />
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="radiationsickness" damagemultiplier="0.75" damagesound="LimbArmor"/>
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="huskinfection" probabilitymultiplier="0.5" damagesound="LimbArmor"/>
       <StatValue stattype="WalkingSpeed" value="0.0" />
       <StatValue stattype="SwimmingSpeed" value="0.0" />
       <StatValue stattype="PropulsionSpeed" value="0.0" />
