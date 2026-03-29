@@ -789,7 +789,7 @@ namespace NoWater
                 return;
             }
             if (projectile == null || !projectile.IsStuckToTarget) { return; }
-            if (__instance.Snapped || !__instance.target.HasTag("harpoonammo") || user == null || user.Removed || user.AnimController.IsClimbing) { return; }
+            if (__instance.Snapped || !__instance.target.HasTag("harpoonammo".ToIdentifier()) || user == null || user.Removed || user.AnimController.IsClimbing) { return; }
 
             Vector2 diff = __instance.target.WorldPosition - __instance.GetSourcePos();
             Vector2 vector = Vector2.Normalize(diff) * Math.Min(0.7f, diff.Length() / 200f);
@@ -940,7 +940,7 @@ namespace NoWater
         public static bool OverrideCreateHulls(Barotrauma.Items.Components.DockingPort __instance)
         {
             if (__instance.DockingTarget == null) { return false; }
-            return !__instance.item.HasTag("nohull") && !__instance.DockingTarget.item.HasTag("nohull");
+            return !__instance.item.HasTag("nohull".ToIdentifier()) && !__instance.DockingTarget.item.HasTag("nohull".ToIdentifier());
         }
         public static bool OverrideAtDamageDepth(ref bool __result)
         {

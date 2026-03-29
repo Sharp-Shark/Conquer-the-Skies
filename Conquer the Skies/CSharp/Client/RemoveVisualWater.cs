@@ -370,13 +370,13 @@ namespace NoWater
 				
 				float length = __instance.DisplayRadius - (turretOrigin - steeringOrigin).Length();
 				
-				float angle = component.Rotation;
+				float angle = component.Rotation; // for DLC use "BarrelRotation" instead of "Rotation"
 				Vector2 turretPos = new Vector2((float) Math.Cos(angle), (float) Math.Sin(angle)) * length * 0.9f;
 				turretPos += turretOrigin;
 				
 				Color color = Color.Orange;
-				if(turret.HasTag("searchlight")) { color = Color.White; }
-				if(turret.HasTag("depthchargelauncher")) { color = Color.Gray; }
+				if(turret.HasTag("searchlight".ToIdentifier())) { color = Color.White; }
+				if(turret.HasTag("depthchargelauncher".ToIdentifier())) { color = Color.Gray; }
 				color.A = (Byte) 255 / 8;
 				GUI.DrawLine(spriteBatch, turretOrigin, turretPos, color, 0f, 2f);
 			}
