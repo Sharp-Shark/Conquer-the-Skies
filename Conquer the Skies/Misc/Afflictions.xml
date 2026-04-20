@@ -23,4 +23,41 @@
   </Affliction>
 </Override>
 
+<Affliction
+  name="Flight"
+  identifier="cts_flight"
+  description=""
+  type="buff"
+  isbuff="true"
+  limbspecific="false"
+  maxstrength="1"
+  showiconthreshold="0">
+  <Effect minstrength="0" maxstrength="1" strengthchange="0">
+    <StatusEffect target="Character" disabledeltatime="true" setvalue="true" conditionalComparison="Or">
+	  <Conditional speciesname="human" />
+	  <Conditional cts_noflight="gt 0" />
+	  <ReduceAffliction identifier="cts_flight" amount="999" />
+	</StatusEffect>
+  </Effect>
+  <icon texture="%ModDir%/Misc/Icons.png" sourcerect="0,0,128,128" color="60,107,195,255" origin="0,0"/>
+</Affliction>
+
+<Affliction
+  name="Flightless"
+  identifier="cts_noflight"
+  description=""
+  type="debuff"
+  isbuff="false"
+  limbspecific="false"
+  maxstrength="1"
+  showiconthreshold="0">
+  <Effect minstrength="0" maxstrength="1" strengthchange="0">
+    <StatusEffect target="Character" disabledeltatime="true" setvalue="true">
+	  <Conditional speciesname="human" />
+	  <ReduceAffliction identifier="cts_noflight" amount="999" />
+	</StatusEffect>
+  </Effect>
+  <icon texture="%ModDir%/Misc/Icons.png" sourcerect="256,0,128,128" color="170,194,147,255" origin="0,0"/>
+</Affliction>
+
 </Afflictions>

@@ -161,7 +161,7 @@ namespace NoWater
             }
             // if true, creature can swim in the air when outside a submarine
             bool swimInAir = __instance.character.SpeciesName != "human".ToIdentifier() && (__instance.currentHull == null || !__instance.character.IsHumanoid && (__instance.character.NeedsWater || !__instance.onGround || (Math.Abs(__instance.targetMovement.Y) > 0))) && !__instance.character.IsDead;
-			if (!FlyingMonsters) { swimInAir = false; }
+            if ((!FlyingMonsters && (__instance.character.CharacterHealth.GetAfflictionStrengthByIdentifier("cts_flight", true) <= 0)) || (__instance.character.CharacterHealth.GetAfflictionStrengthByIdentifier("cts_noflight", true) > 0)) { swimInAir = false; }
 			
             if (!__instance.character.Enabled || __instance.character.Removed || __instance.Frozen || __instance.Invalid || __instance.Collider == null || __instance.Collider.Removed) { return false; }
 

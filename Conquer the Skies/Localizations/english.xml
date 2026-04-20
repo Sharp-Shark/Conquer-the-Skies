@@ -19,6 +19,11 @@
   <entitydescription.aerialchargeshell>A tank of suspendium and a payload. Will float up and then explode.</entitydescription.aerialchargeshell>
   <entityname.mortarshell>Mortar Railgun Shell</entityname.mortarshell>
   <entitydescription.mortarshell>Similar to a regular railgun shell, but has a more intense ballistic arc due to added weight. Can be loaded with additional explosives that detonate upon impact.</entitydescription.mortarshell>
+  
+  <afflictionname.cts_flight>Airborne</afflictionname.cts_flight>
+  <afflictiondescription.cts_flight>Fly in the air like a fish swims in water.</afflictiondescription.cts_flight>
+  <afflictionname.cts_noflight>Flightless</afflictionname.cts_noflight>
+  <afflictiondescription.cts_noflight>Ungracefully plummet downwards.</afflictiondescription.cts_noflight>
 
   <Override>
   <entitydescription.steroids>Temporarily increases muscular strength.</entitydescription.steroids>

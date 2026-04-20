@@ -173,7 +173,7 @@ end
 
 -- Announce ships of each team
 Hook.Add('roundStart', 'CTS.announceShips', function ()
-	if Game.IsSingleplayer then return end
+	if Game.IsSingleplayer or CLIENT then return end
 	Timer.Wait(function ()
 		for s in Submarine.Loaded do
 			if (s.TeamID == 1) or (s.TeamID == 2) then
