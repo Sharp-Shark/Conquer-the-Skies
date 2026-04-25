@@ -26,12 +26,6 @@
   <afflictiondescription.cts_noflight>Ungracefully plummet downwards.</afflictiondescription.cts_noflight>
 
   <Override>
-  <entitydescription.steroids>Temporarily increases muscular strength.</entitydescription.steroids>
-  <afflictiondescription.strengthen>Patient's muscular strength is increased.</afflictiondescription.strengthen>
-  <entityname.abyssdivingsuit>Heavy Suit</entityname.abyssdivingsuit>
-  <entitydescription.abyssdivingsuit>A cumbersome but sturdy suit designed for ship defense. Protects against damage and high pressure up to 6,600 meters. Due to the weight, powered flight is not possible and walking speed is slow.</entitydescription.abyssdivingsuit>
-  <entityname.abyssdivingsuit>Heavy Suit</entityname.abyssdivingsuit>
-  <entitydescription.abyssdivingsuit>A cumbersome but sturdy suit designed for ship defense. Protects against damage and high pressure up to 6,600 meters. Due to the weight, powered flight is not possible and walking speed is slow.</entitydescription.abyssdivingsuit>
   <entityname.combatdivingsuit>Combat Suit</entityname.combatdivingsuit>
   <entitydescription.combatdivingsuit>An agile, lightweight suit designed for combat. Offers some protection against damage and withstands pressure up to a depth of 5,700 meters.</entitydescription.combatdivingsuit>
   <entityname.slipsuit>Jetsuit</entityname.slipsuit>

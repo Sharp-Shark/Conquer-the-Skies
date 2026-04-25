@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<contentpackage name="Conquer the Skies PvP Overhaul" modversion="1.0.0" corepackage="False" steamworkshopid="3714247495" gameversion="1.12.7.0">
+  <Jobs file="%ModDir%/Misc/Jobs.xml" />
+  <Afflictions file="%ModDir%/Misc/Afflictions.xml" />
+  <Item file="%ModDir%/Items/Items.xml" />
+  <Text file="%ModDir%/Localizations/english.xml" />
+</contentpackage>
