@@ -1,6 +1,13 @@
 -- Conquer the Skies table
 if CTS == nil then print('[!] Mod "Conquer the Skies PvP Overhaul" needs to be loaded after the "Conquer the Skies" mod.') return end
 
+-- Path of the overhaul mod
+CTS.pathOverhaul = table.pack(...)[1]
+
+-- Other files
+require 'CTS/discord'
+
+-- this line has a comment because it bothers me how if there isn't it feels like it is a part of the "Other files" segment
 CTS.roundStartFunctions.main = function (luaReloaded)
 	if Submarine.MainSub ~= nil then
 		-- automations for sub editor

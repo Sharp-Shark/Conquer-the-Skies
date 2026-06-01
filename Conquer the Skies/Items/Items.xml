@@ -57,11 +57,11 @@
     <Sprite texture="%ModDir%/Items/depthchargeturret.png" depth="0.01" sourcerect="84,0,256,256" canflipy="false" />
     <MinimapIcon name="Command_Weapons_Coilgun" texture="Content/UI/CommandUIAtlas.png" sourcerect="768,0,128,128" />
     <SwappableItem price="5000" replacementonuninstall="turrethardpoint" origin="128,215" swapidentifier="basicturret">
-      <SchematicSprite texture="Content/UI/WeaponUI.png" sourcerect="256,0,256,389" />
+      <SchematicSprite texture="%ModDir%/Misc/WeaponUI.png" sourcerect="256,0,256,389" />
       <SwapConnectedItem tag="periscope" swapto="periscope" />
       <SwapConnectedItem tag="turretammosource" swapto="depthchargeammosource" />
     </SwappableItem>    
-    <UpgradePreviewSprite scale="2.5" texture="Content/UI/WeaponUI.png" sourcerect="7,810,109,65" origin="0.5,0.5" />
+    <UpgradePreviewSprite scale="2.5" texture="%ModDir%/Misc/WeaponUI.png" sourcerect="7,810,109,65" origin="0.5,0.5" />
     <StaticBody width="80" radius="80" />
     <Turret launchimpulse="5.0" canbeselected="false" characterusable="false" linkable="true" barrelpos="126,82" firingoffset="0,-180"  rotationlimits="180,360" powerconsumption="10000.0" showchargeindicator="true" showprojectileindicator="true" recoildistance="100" reload="5" springstiffnesslowskill="2" springstiffnesshighskill="50" springdampinglowskill="0.5" springdampinghighskill="10" rotationspeedlowskill="1" rotationspeedhighskill="8" MaxAngleOffset="10" AICurrentTargetPriorityMultiplier="1.1">
       <sound file="Content/Items/Weapons/Coilgun1.ogg" range="10000" type="OnUse" />
@@ -70,7 +70,7 @@
       <sound file="Content/Items/Weapons/Coilgun4.ogg" range="10000" type="OnUse" />
       <sound file="Content/Items/Weapons/Coilgun5.ogg" range="10000" type="OnUse" />
       <sound file="Content/Items/Weapons/Coilgun6.ogg" range="10000" type="OnUse" />
-      <WeaponIndicator texture="Content/UI/WeaponUI.png" sourcerect="425,913,66,36" origin="0.24, 0.472" />
+      <WeaponIndicator texture="%ModDir%/Misc/WeaponUI.png" sourcerect="425,913,66,36" origin="0.24, 0.472" />
       <RailSprite texture="%ModDir%/Items/depthchargeturret.png" depth="0.011" sourcerect="0,0,84,206" origin="0.52, 0.737" />
       <BarrelSprite texture="Content/Items/Weapons/TurretsAndDepthCharges.png" depth="0.012" sourcerect="259,1,85,149" origin="0.52, 1.385" />
       <Crosshair texture="Content/Items/Weapons/Crosshairs.png" sourcerect="256,0,256,256" />

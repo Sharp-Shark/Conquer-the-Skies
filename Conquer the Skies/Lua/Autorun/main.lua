@@ -14,10 +14,6 @@ json.parse = json.decode
 
 require 'CTS/utilities'
 
-if File.Exists(CTS.path .. '/Lua/CTS/secret.lua') then
-	require 'CTS/secret'
-end
-
 -- Functions executed at round start
 CTS.roundStartFunctions = {}
 local doRoundStartFunctions = function (luaReloaded)
@@ -166,28 +162,6 @@ if CLIENT then
         end
     end)
 end
-
--- Announce ships of each team
-Hook.Add('roundStart', 'CTS.announceShips', function ()
-	if Game.IsSingleplayer or CLIENT then return end
-	Timer.Wait(function ()
-		for s in Submarine.Loaded do
-			if (s.TeamID == 1) or (s.TeamID == 2) then
-				for c in Client.ClientList do
-					local msg = ChatMessage.Create('[Intel]', s.Info.Name, ChatMessageType.Server, nil, nil)
-					msg.Color = Color.Orange
-					if s.TeamID == 1 then msg.Color = Color.Cyan end
-					Game.SendDirectChatMessage(msg, c)
-				end
-			end
-		end
-	end, 1000)
-end)
-
--- I hate Ballast Flora
-Hook.Patch("Barotrauma.MapCreatures.Behavior.BallastFloraBehavior", "Update", function(instance, ptable)
-	instance.Kill()
-end, Hook.HookMethodType.After)
 
 -- Load other files
 require 'CTS/networking/server'
