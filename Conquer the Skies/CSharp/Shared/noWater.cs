@@ -880,6 +880,7 @@ namespace NoWater
         }
         public static void OverridePropulsionUse(Barotrauma.Items.Components.Propulsion __instance, float deltaTime, Character character)
         {
+            if (character == null || character.Removed) { return false; }
             if (!__instance.IsActive) { return; }
 
             Vector2 dir = character.CursorPosition - character.Position;
