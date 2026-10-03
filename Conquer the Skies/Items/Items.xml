@@ -1,5 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Items>
+  <Item name="Thermite" identifier="thermite" category="Weapon" description="" Scale="0.5" Tags="smallitem,explosive,demolitionsexpert" maxstacksize="32" maxstacksizecharacterinventory="8" cargocontaineridentifier="explosivecrate" impactsoundtag="impact_soft">
+    <Fabricate suitablefabricators="fabricator" requiredtime="20">
+      <RequiredSkill identifier="weapons" level="50" />
+      <RequiredItem identifier="iron" />
+      <RequiredItem identifier="aluminium" />
+    </Fabricate>
+    <InventoryIcon texture="%ModDir%/Items/thermite.png" sourcerect="0,0,64,64" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Items/thermite.png" depth="0.55" sourcerect="64,0,45,30" origin="0.5,0.5" />
+    <Body width="45" height="30" density="20" />
+    <Throwable characterusable="false" slots="Any,RightHand,LeftHand" canbecombined="true" removeoncombined="true" throwforce="3.5" aimpos="35,-10" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnUse" target="This" Condition="-100.0" disabledeltatime="true"/>
+      <StatusEffect type="OnBroken" target="This">
+        <Explosion range="300.0" ballastfloradamage="100" structuredamage="400" itemdamage="600" force="4" severlimbsprobability="0.4" debris="false" decal="explosion" decalsize="0.4" penetration="0.4">
+          <Affliction identifier="burn" strength="16" dividebylimbcount="true"/>
+        </Explosion>
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This" duration="3.0" soundselectionmode="All">
+        <sound file="Content/Items/Tools/FlareLoop.ogg" range="800" volume="5.0" />
+        <ParticleEmitter particle="flare" anglemax="360" velocitymin="100" velocitymax="400" particlespersecond="32" colormultiplier="155,255,155,255" />
+        <ParticleEmitter particle="spark" anglemax="360" velocitymin="300" velocitymax="350" particlespersecond="8" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This" delay="3.0">
+        <Explosion range="150.0" ballastfloradamage="50" structuredamage="200" itemdamage="300" force="2" severlimbsprobability="0.2" debris="false" decal="explosion" decalsize="0.2" penetration="0.2">
+          <Affliction identifier="burn" strength="8" dividebylimbcount="true"/>
+        </Explosion>
+        <Remove />
+      </StatusEffect>
+    </Throwable>
+    <Quality>
+      <QualityStat stattype="ExplosionRadius" value="0.1"/>
+      <QualityStat stattype="ExplosionDamage" value="0.1"/>
+    </Quality>
+  </Item>
   <!-- rubber spear stuns instead of dealing damage -->
   <Item name="Rubber Harpoon" identifier="rubberspear" category="Weapon" maxstacksize="32" maxstacksizecharacterinventory="6" interactthroughwalls="true" cargocontaineridentifier="metalcrate" tags="mediumitem,harpoonammo,handheldammo" Scale="0.5" impactsoundtag="impact_metal_light">
     <PreferredContainer primary="harpoongun" amount="6" spawnprobability="1" />
@@ -46,6 +79,60 @@
         <Conditional Snapped="false" />
         <Conditional mass="lt 30" />
         <Affliction identifier="drag" strength="1" />
+      </StatusEffect>
+    </Projectile>
+    <Upgrade gameversion="0.10.0.0" scale="0.5" />
+  </Item>
+  <!-- rubber spear with a detonator -->
+  <Item name="Sticky Harpoon" identifier="detonatorrubberspear" category="Weapon" maxstacksize="1" maxstacksizecharacterinventory="1" interactthroughwalls="true" cargocontaineridentifier="metalcrate" tags="mediumitem,harpoonammo,handheldammo" Scale="0.5" impactsoundtag="impact_metal_light">
+    <Deconstruct time="5">
+      <Item identifier="rubberspear"/>
+      <Item identifier="fpgacircuit" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="10" amount="1">
+      <RequiredSkill identifier="mechanical" level="10" />
+      <RequiredItem identifier="rubberspear" />
+      <RequiredItem identifier="detonator" />
+    </Fabricate>
+    <InventoryIcon texture="%ModDir%/Items/detonatorrubberspear.png" sourcerect="0,20,64,64" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Items/detonatorrubberspear.png" sourcerect="0,0,168,20" depth="0.55" origin="0.5,0.5" />
+    <Body width="160" height="20" density="30" />
+    <Pickable slots="Any" msg="ItemMsgPickUpSelect" />
+    <ItemContainer canbeselected="true" capacity="1" maxstacksize="1" itempos="20,-11" hideitems="false" containedstateindicatorstyle="explosive" containedspritedepth="0.81">
+      <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="64,384,64,64" origin="0.5,0.5" />
+      <GuiFrame relativesize="0.11,0.17" anchor="Center" minsize="140,170" maxsize="280,280" style="ItemUI" />
+      <Containable items="explosive" />
+    </ItemContainer>
+    <PowerContainer capacity="2.0" charge="3.402823466E+38" canbeselected="false" />
+    <LightComponent characterusable="false" LightColor="248,81,81,80" range="20" powerconsumption="0" IsOn="false" blinkfrequency="4.0" offset="13,0" castshadows="false" allowingameediting="false">
+      <sprite texture="Content/Items/Weapons/weapons_new.png" depth="0.55" sourcerect="239,243,14,18" origin="-0.24,0.5" alpha="1.0" />
+      <StatusEffect type="OnActive" target="This" IsOn="false">
+        <Conditional attached="false" targetitemcomponentname="Holdable" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="This" interval="0.2" disabledeltatime="true" charge="-0.2" stackable="false" forcePlaySounds="true">
+        <sound file="Content/Items/WarningBeepSlow.ogg" range="750" frequencymultiplier="2.0" volume="0.75" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="This" IsOn="false">
+        <sound file="Content/Items/Button/Switch1.ogg" range="500.0" />
+        <Conditional targetitemcomponent="PowerContainer" charge="0.0" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="Contained">
+        <Use />
+        <Conditional targetcontainer="true" targetitemcomponent="PowerContainer" charge="0.0" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="This" disabledeltatime="true" setvalue="true" charge="3.402823466E+38" IsOn="false" >
+        <Conditional targetitemcomponent="PowerContainer" charge="0.0" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This">
+        <Remove />
+      </StatusEffect>
+    </LightComponent>
+    <Projectile characterusable="false" launchimpulse="10.0" sticktocharacters="true" sticktoitems="true" sticktostructures="true" sticktodeflective="true" sticktodoors="true" sticktolighttargets="true">
+      <Attack structuredamage="5" itemdamage="5" targetforce="20" >
+        <Affliction identifier="blunttrauma" strength="5" />
+      </Attack>
+      <StatusEffect type="OnImpact" target="This" IsOn="true" charge="3.402823466E+38" setvalue="true">
+        <Conditional IsOn="false" />
       </StatusEffect>
     </Projectile>
     <Upgrade gameversion="0.10.0.0" scale="0.5" />
